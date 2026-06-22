@@ -5,6 +5,7 @@ use App\Http\Controllers\BenurController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KategoriPengeluaranController;
 use App\Http\Controllers\KolamController;
+use App\Http\Controllers\LandingController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PemasukanController;
 use App\Http\Controllers\PengeluaranController;
@@ -12,11 +13,27 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 
-Route::get('/', function () {
-    return Inertia::render('welcome', [
-        'canRegister' => Features::enabled(Features::registration()),
-    ]);
-})->name('home');
+Route::get(
+    '/',
+    [LandingController::class, 'index']
+)->name('landing');
+
+Route::get(
+    '/hasil-panen',
+    [LandingController::class, 'hasilPanen']
+)->name('hasil-panen');
+
+Route::get(
+    '/stok-udang',
+    [LandingController::class, 'stokUdang']
+)->name('stok-udang');
+
+Route::get(
+    '/tentang',
+    [LandingController::class, 'tentang']
+)->name('tentang');
+
+
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
