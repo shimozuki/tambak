@@ -32,4 +32,54 @@ class LandingController extends Controller
 
         ]);
     }
+
+    public function tentang()
+    {
+        $totalKolam = Kolam::count();
+
+        $totalProduksi = Pemasukan::sum(
+            'berat_panen'
+        );
+
+        $totalNilaiWajar =
+            AsetBiologis::sum(
+                'nilai_wajar'
+            );
+
+        return Inertia::render(
+            'tentang',
+            [
+                'data' => [
+                    'nama_tambak' =>
+                    'Tambak Udang Vaname',
+
+                    'alamat' =>
+                    'Sumbawa Besar',
+
+                    'total_kolam' =>
+                    $totalKolam,
+
+                    'total_produksi' =>
+                    $totalProduksi,
+
+                    'total_nilai_wajar' =>
+                    $totalNilaiWajar,
+                ]
+            ]
+        );
+    }
+
+    public function hasilPanen()
+    {
+        $panens = Pemasukan::with('kolam')
+            ->latest('tanggal_panen')
+            ->paginate(10);
+
+        return Inertia::render(
+            'hasil-panen',
+            [
+                'panens' => $panens,
+            ]
+        );
+    }
 }

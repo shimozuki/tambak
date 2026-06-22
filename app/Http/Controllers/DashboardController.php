@@ -43,19 +43,44 @@ class DashboardController extends Controller
             AsetBiologis::sum('nilai_wajar');
 
         /*
-        |--------------------------------------------------------------------------
-        | NERACA
-        |--------------------------------------------------------------------------
-        */
+|--------------------------------------------------------------------------
+| NERACA PSAK 69
+|--------------------------------------------------------------------------
+*/
 
-        $kas = $labaRugi;
+        $kas =
+            $totalPemasukan -
+            $totalPengeluaran;
 
-        $asetBiologis =
-            AsetBiologis::sum('nilai_wajar');
+        /*
+|--------------------------------------------------------------------------
+| ASET BIOLOGIS PER KOLAM
+|--------------------------------------------------------------------------
+*/
+
+        $asetBiologisPerKolam =
+            AsetBiologis::with('kolam')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'kolam' => $item->kolam?->nama_kolam,
+                    'nilai_wajar' => $item->nilai_wajar,
+                ];
+            });
+
+        $totalAsetBiologis =
+            $asetBiologisPerKolam
+            ->sum('nilai_wajar');
 
         $totalAset =
             $kas +
-            $asetBiologis;
+            $totalAsetBiologis;
+
+        /*
+        |--------------------------------------------------------------------------
+        | EKUITAS
+        |--------------------------------------------------------------------------
+        */
 
         $modalPemilik =
             $totalAset;
@@ -122,10 +147,14 @@ class DashboardController extends Controller
                 'grafik' => $grafik,
 
                 'neraca' => [
+
                     'kas' => $kas,
 
                     'aset_biologis' =>
-                    $asetBiologis,
+                    $asetBiologisPerKolam,
+
+                    'total_aset_biologis' =>
+                    $totalAsetBiologis,
 
                     'total_aset' =>
                     $totalAset,

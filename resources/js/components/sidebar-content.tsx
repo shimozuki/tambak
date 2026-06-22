@@ -179,6 +179,14 @@ export function SidebarContent({
     />
 
     <NavItem
+    icon={<Fish size={20} />}
+    label="Stok Udang"
+    href="/stok-udang"
+    isCollapsed={isCollapsed}
+    active={isActive('/stok-udang')}
+/>
+
+    <NavItem
         icon={<Wallet size={20} />}
         label="Pengeluaran"
         href="/pengeluarans"
@@ -213,12 +221,19 @@ export function SidebarContent({
 
 <nav className="space-y-1">
     <NavItem
-        icon={<FileText size={20} />}
-        label="Laporan Keuangan"
-        href="/laporan"
-        isCollapsed={isCollapsed}
-        active={isActive('/laporan')}
-    />
+    icon={<FileText size={20} />}
+    label="Laporan Keuangan"
+    href="/laporan"
+    isCollapsed={isCollapsed}
+    active={url === '/laporan'}
+/>
+    <NavItem
+    icon={<Landmark size={20} />}
+    label="Perubahan Nilai Wajar"
+    href="/laporan/perubahan-nilai-wajar"
+    isCollapsed={isCollapsed}
+    active={url.startsWith('/laporan/perubahan-nilai-wajar')}
+/>
 </nav>
 
 

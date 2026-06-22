@@ -20,8 +20,16 @@ interface Props {
 
     neraca: {
         kas: number;
-        aset_biologis: number;
+
+        aset_biologis: {
+            kolam: string;
+            nilai_wajar: number;
+        }[];
+
+        total_aset_biologis: number;
+
         total_aset: number;
+
         modal_pemilik: number;
     };
 
@@ -209,81 +217,190 @@ export default function Dashboard({
                 </div>
 
                 {/* Neraca */}
-                <div className="rounded-3xl bg-white p-6 shadow-sm">
+                <div className="rounded-3xl bg-white p-8 shadow-sm">
 
-                    <h2 className="mb-6 text-xl font-bold">
-                        Neraca Sederhana
-                    </h2>
+    <div className="mb-8">
 
-                    <div className="grid gap-8 md:grid-cols-2">
+        <h2 className="text-2xl font-bold">
+            Laporan Posisi Keuangan
+        </h2>
 
-                        <div>
+        <p className="text-slate-500">
+            Berdasarkan PSAK 69 Agrikultur
+        </p>
 
-                            <h3 className="mb-4 font-semibold">
-                                Aset
-                            </h3>
+    </div>
 
-                            <div className="space-y-3">
+    {/* ASET */}
 
-                                <div className="flex justify-between">
-                                    <span>Kas</span>
+    <div className="mb-8">
 
-                                    <span>
-                                        {rupiah(neraca.kas)}
-                                    </span>
-                                </div>
+        <h3
+            className="
+                mb-4
+                border-b
+                pb-2
+                text-lg
+                font-bold
+                text-teal-600
+            "
+        >
+            ASET
+        </h3>
 
-                                <div className="flex justify-between">
-                                    <span>Aset Biologis</span>
+        <div className="space-y-3">
 
-                                    <span>
-                                        {rupiah(
-                                            neraca.aset_biologis
-                                        )}
-                                    </span>
-                                </div>
+            <div className="flex justify-between">
+                <span>Kas</span>
 
-                                <hr />
+                <span className="font-semibold">
+                    {rupiah(neraca.kas)}
+                </span>
+            </div>
 
-                                <div className="flex justify-between font-bold">
-                                    <span>Total Aset</span>
+        </div>
 
-                                    <span>
-                                        {rupiah(
-                                            neraca.total_aset
-                                        )}
-                                    </span>
-                                </div>
+    </div>
 
-                            </div>
+    {/* ASET BIOLOGIS */}
 
-                        </div>
+    <div className="mb-8">
 
-                        <div>
+        <h3
+            className="
+                mb-4
+                border-b
+                pb-2
+                text-lg
+                font-bold
+                text-purple-600
+            "
+        >
+            Aset Biologis
+        </h3>
 
-                            <h3 className="mb-4 font-semibold">
-                                Modal
-                            </h3>
+        <div className="space-y-3">
 
-                            <div className="space-y-3">
+            {neraca.aset_biologis.map(
+                (item: any, index: number) => (
+                    <div
+                        key={index}
+                        className="flex justify-between"
+                    >
+                        <span>
+                            {item.kolam}
+                        </span>
 
-                                <div className="flex justify-between">
-                                    <span>Modal Pemilik</span>
-
-                                    <span>
-                                        {rupiah(
-                                            neraca.modal_pemilik
-                                        )}
-                                    </span>
-                                </div>
-
-                            </div>
-
-                        </div>
-
+                        <span className="font-semibold">
+                            {rupiah(
+                                item.nilai_wajar
+                            )}
+                        </span>
                     </div>
+                )
+            )}
 
-                </div>
+            <div className="mt-4 flex justify-between border-t pt-4 font-bold">
+
+                <span>
+                    Total Aset Biologis
+                </span>
+
+                <span>
+                    {rupiah(
+                        neraca.total_aset_biologis
+                    )}
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {/* TOTAL ASET */}
+
+    <div
+        className="
+            mb-8
+            rounded-2xl
+            bg-teal-50
+            p-4
+        "
+    >
+        <div className="flex justify-between">
+
+            <span className="font-bold">
+                TOTAL ASET
+            </span>
+
+            <span className="text-lg font-bold text-teal-700">
+                {rupiah(
+                    neraca.total_aset
+                )}
+            </span>
+
+        </div>
+    </div>
+
+    {/* EKUITAS */}
+
+    <div className="mb-6">
+
+        <h3
+            className="
+                mb-4
+                border-b
+                pb-2
+                text-lg
+                font-bold
+                text-green-600
+            "
+        >
+            EKUITAS
+        </h3>
+
+        <div className="flex justify-between">
+
+            <span>
+                Modal Pemilik
+            </span>
+
+            <span className="font-semibold">
+                {rupiah(
+                    neraca.modal_pemilik
+                )}
+            </span>
+
+        </div>
+
+    </div>
+
+    {/* TOTAL EKUITAS */}
+
+    <div
+        className="
+            rounded-2xl
+            bg-green-50
+            p-4
+        "
+    >
+        <div className="flex justify-between">
+
+            <span className="font-bold">
+                TOTAL EKUITAS
+            </span>
+
+            <span className="text-lg font-bold text-green-700">
+                {rupiah(
+                    neraca.modal_pemilik
+                )}
+            </span>
+
+        </div>
+    </div>
+
+</div>
 
                 {/* Fair Value Report */}
                 <div className="rounded-3xl bg-white p-6 shadow-sm">

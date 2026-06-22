@@ -3,12 +3,14 @@
 use App\Http\Controllers\AsetBiologisController;
 use App\Http\Controllers\BenurController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FairValueController;
 use App\Http\Controllers\KategoriPengeluaranController;
 use App\Http\Controllers\KolamController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PemasukanController;
 use App\Http\Controllers\PengeluaranController;
+use App\Http\Controllers\StokUdangController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -17,6 +19,16 @@ Route::get(
     '/',
     [LandingController::class, 'index']
 )->name('home');
+
+Route::get(
+    '/tentang',
+    [LandingController::class, 'tentang']
+);
+
+Route::get(
+    '/hasil-panen',
+    [LandingController::class, 'hasilPanen']
+);
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
@@ -56,6 +68,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         '/laporan/export-pdf',
         [LaporanController::class, 'exportPdf']
     )->name('laporan.export-pdf');
+
+    Route::get(
+        '/laporan/perubahan-nilai-wajar',
+        [FairValueController::class, 'index']
+    )->name('laporan.perubahan-nilai-wajar');
+
+    Route::get(
+        '/stok-udang',
+        [StokUdangController::class, 'index']
+    );
 });
 
 require __DIR__ . '/settings.php';
