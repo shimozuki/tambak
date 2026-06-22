@@ -51,6 +51,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         '/laporan',
         [LaporanController::class, 'index']
     )->name('laporan.index');
+
+    Route::get(
+        '/laporan/export-pdf',
+        [LaporanController::class, 'exportPdf']
+    )->name('laporan.export-pdf');
 });
 
 require __DIR__ . '/settings.php';

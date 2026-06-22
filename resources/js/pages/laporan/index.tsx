@@ -142,6 +142,23 @@ return (
                     >
                         Filter
                     </button>
+                    <a
+    href={`/laporan/export-pdf?tanggal_awal=${filters.tanggal_awal ?? ''}&tanggal_akhir=${filters.tanggal_akhir ?? ''}`}
+    target="_blank"
+    className="
+        flex
+        items-center
+        gap-2
+        rounded-xl
+        bg-red-600
+        px-5
+        py-3
+        text-white
+        hover:bg-red-700
+    "
+>
+    Export PDF
+</a>
                 </div>
             </div>
 

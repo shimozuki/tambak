@@ -2,11 +2,10 @@ import AppLayout from '@/layouts/app-layout';
 import { Head } from '@inertiajs/react';
 import {
     Fish,
+    Package,
     Wallet,
     TrendingUp,
-    TrendingDown,
     Landmark,
-    Package,
 } from 'lucide-react';
 
 interface Props {
@@ -18,11 +17,6 @@ interface Props {
         laba_rugi: number;
         nilai_wajar: number;
     };
-
-    grafik: {
-        kategori: string;
-        nilai: number;
-    }[];
 
     neraca: {
         kas: number;
@@ -36,7 +30,6 @@ interface Props {
 
 export default function Dashboard({
     summary,
-    grafik,
     neraca,
     fairValueReport,
 }: Props) {
@@ -54,66 +47,77 @@ export default function Dashboard({
             <div className="space-y-6">
 
                 {/* Header */}
-                <div className="rounded-3xl bg-white p-6 shadow-sm">
-                    <h1 className="text-3xl font-bold">
+                <div className="rounded-3xl bg-white p-8 shadow-sm">
+                    <h1 className="text-3xl font-bold text-slate-900">
                         Dashboard Tambak Udang
                     </h1>
 
                     <p className="mt-2 text-slate-500">
-                        Ringkasan keuangan dan aset biologis berdasarkan PSAK 69.
+                        Ringkasan keuangan, produksi, dan aset biologis
+                        berdasarkan PSAK 69 Agrikultur.
                     </p>
                 </div>
 
                 {/* Summary Cards */}
-                <div className="grid gap-6 md:grid-cols-3 xl:grid-cols-6">
+                <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
 
-                    <div className="rounded-3xl bg-white p-5 shadow-sm">
-                        <Fish className="mb-3 text-teal-600" />
+                    <div className="rounded-3xl bg-white p-6 shadow-sm">
+                        <Fish
+                            size={32}
+                            className="mb-4 text-teal-600"
+                        />
+
                         <div className="text-sm text-slate-500">
                             Total Kolam
                         </div>
-                        <div className="text-3xl font-bold">
+
+                        <div className="mt-2 text-4xl font-bold">
                             {summary.total_kolam}
                         </div>
                     </div>
 
-                    <div className="rounded-3xl bg-white p-5 shadow-sm">
-                        <Package className="mb-3 text-blue-600" />
+                    <div className="rounded-3xl bg-white p-6 shadow-sm">
+                        <Package
+                            size={32}
+                            className="mb-4 text-blue-600"
+                        />
+
                         <div className="text-sm text-slate-500">
                             Total Benur
                         </div>
-                        <div className="text-3xl font-bold">
+
+                        <div className="mt-2 text-4xl font-bold">
                             {summary.total_benur.toLocaleString()}
                         </div>
                     </div>
 
-                    <div className="rounded-3xl bg-white p-5 shadow-sm">
-                        <TrendingUp className="mb-3 text-green-600" />
+                    <div className="rounded-3xl bg-white p-6 shadow-sm">
+                        <TrendingUp
+                            size={32}
+                            className="mb-4 text-green-600"
+                        />
+
                         <div className="text-sm text-slate-500">
-                            Pemasukan
+                            Total Pemasukan
                         </div>
-                        <div className="text-lg font-bold text-green-600">
+
+                        <div className="mt-2 text-xl font-bold text-green-600">
                             {rupiah(summary.total_pemasukan)}
                         </div>
                     </div>
 
-                    <div className="rounded-3xl bg-white p-5 shadow-sm">
-                        <TrendingDown className="mb-3 text-red-600" />
-                        <div className="text-sm text-slate-500">
-                            Pengeluaran
-                        </div>
-                        <div className="text-lg font-bold text-red-600">
-                            {rupiah(summary.total_pengeluaran)}
-                        </div>
-                    </div>
+                    <div className="rounded-3xl bg-white p-6 shadow-sm">
+                        <Wallet
+                            size={32}
+                            className="mb-4 text-amber-600"
+                        />
 
-                    <div className="rounded-3xl bg-white p-5 shadow-sm">
-                        <Wallet className="mb-3 text-amber-600" />
                         <div className="text-sm text-slate-500">
-                            Laba Rugi
+                            Laba Bersih
                         </div>
+
                         <div
-                            className={`text-lg font-bold ${
+                            className={`mt-2 text-xl font-bold ${
                                 summary.laba_rugi >= 0
                                     ? 'text-green-600'
                                     : 'text-red-600'
@@ -123,73 +127,115 @@ export default function Dashboard({
                         </div>
                     </div>
 
-                    <div className="rounded-3xl bg-white p-5 shadow-sm">
-                        <Landmark className="mb-3 text-purple-600" />
-                        <div className="text-sm text-slate-500">
-                            Nilai Wajar
-                        </div>
-                        <div className="text-lg font-bold text-purple-600">
-                            {rupiah(summary.nilai_wajar)}
-                        </div>
-                    </div>
-
                 </div>
 
-                {/* Grafik */}
-                <div className="rounded-3xl bg-white p-6 shadow-sm">
-                    <h2 className="mb-4 text-xl font-bold">
-                        Grafik Ringkasan
-                    </h2>
+                {/* Ringkasan Keuangan */}
+                <div className="grid gap-6 lg:grid-cols-2">
 
-                    <div className="space-y-4">
-                        {grafik.map((item) => (
-                            <div key={item.kategori}>
-                                <div className="mb-1 flex justify-between">
-                                    <span>{item.kategori}</span>
+                    <div className="rounded-3xl bg-white p-6 shadow-sm">
 
-                                    <span className="font-semibold">
-                                        {rupiah(item.nilai)}
-                                    </span>
-                                </div>
+                        <h2 className="mb-6 text-xl font-bold">
+                            Ringkasan Keuangan
+                        </h2>
 
-                                <div className="h-4 rounded-full bg-slate-100">
-                                    <div
-                                        className="h-4 rounded-full bg-teal-600"
-                                        style={{
-                                            width: `${Math.min(
-                                                item.nilai /
-                                                    1000000,
-                                                100
-                                            )}%`,
-                                        }}
-                                    />
-                                </div>
+                        <div className="space-y-4">
+
+                            <div className="flex justify-between">
+                                <span>Total Pemasukan</span>
+
+                                <span className="font-bold text-green-600">
+                                    {rupiah(summary.total_pemasukan)}
+                                </span>
                             </div>
-                        ))}
+
+                            <div className="flex justify-between">
+                                <span>Total Pengeluaran</span>
+
+                                <span className="font-bold text-red-600">
+                                    {rupiah(summary.total_pengeluaran)}
+                                </span>
+                            </div>
+
+                            <hr />
+
+                            <div className="flex justify-between">
+                                <span>Laba Bersih</span>
+
+                                <span className="font-bold text-teal-600">
+                                    {rupiah(summary.laba_rugi)}
+                                </span>
+                            </div>
+
+                        </div>
+
                     </div>
+
+                    <div className="rounded-3xl bg-white p-6 shadow-sm">
+
+                        <div className="mb-6 flex items-center gap-3">
+
+                            <Landmark
+                                size={28}
+                                className="text-purple-600"
+                            />
+
+                            <h2 className="text-xl font-bold">
+                                PSAK 69 Agrikultur
+                            </h2>
+
+                        </div>
+
+                        <div className="space-y-4">
+
+                            <div className="flex justify-between">
+                                <span>Nilai Wajar</span>
+
+                                <span className="font-bold text-purple-600">
+                                    {rupiah(summary.nilai_wajar)}
+                                </span>
+                            </div>
+
+                            <div className="rounded-2xl bg-purple-50 p-4">
+                                <p className="text-sm text-purple-700">
+                                    Nilai aset biologis dihitung menggunakan
+                                    metode Fair Value sesuai PSAK 69.
+                                </p>
+                            </div>
+
+                        </div>
+
+                    </div>
+
                 </div>
 
                 {/* Neraca */}
                 <div className="rounded-3xl bg-white p-6 shadow-sm">
-                    <h2 className="mb-4 text-xl font-bold">
+
+                    <h2 className="mb-6 text-xl font-bold">
                         Neraca Sederhana
                     </h2>
 
-                    <div className="grid gap-6 md:grid-cols-2">
+                    <div className="grid gap-8 md:grid-cols-2">
 
                         <div>
-                            <h3 className="mb-3 font-semibold">
+
+                            <h3 className="mb-4 font-semibold">
                                 Aset
                             </h3>
 
-                            <div className="space-y-2">
+                            <div className="space-y-3">
+
                                 <div className="flex justify-between">
                                     <span>Kas</span>
-                                    <span>{rupiah(neraca.kas)}</span>
+
+                                    <span>
+                                        {rupiah(neraca.kas)}
+                                    </span>
                                 </div>
 
                                 <div className="flex justify-between">
                                     <span>Aset Biologis</span>
+
                                     <span>
                                         {rupiah(
                                             neraca.aset_biologis
@@ -201,21 +247,26 @@ export default function Dashboard({
 
                                 <div className="flex justify-between font-bold">
                                     <span>Total Aset</span>
+
                                     <span>
                                         {rupiah(
                                             neraca.total_aset
                                         )}
                                     </span>
                                 </div>
+
                             </div>
+
                         </div>
 
                         <div>
-                            <h3 className="mb-3 font-semibold">
+
+                            <h3 className="mb-4 font-semibold">
                                 Modal
                             </h3>
 
-                            <div className="space-y-2">
+                            <div className="space-y-3">
+
                                 <div className="flex justify-between">
                                     <span>Modal Pemilik</span>
 
@@ -225,22 +276,47 @@ export default function Dashboard({
                                         )}
                                     </span>
                                 </div>
+
                             </div>
+
                         </div>
 
                     </div>
+
                 </div>
 
-                {/* PSAK 69 */}
+                {/* Fair Value Report */}
                 <div className="rounded-3xl bg-white p-6 shadow-sm">
-                    <h2 className="mb-4 text-xl font-bold">
-                        PSAK 69 Fair Value Report
-                    </h2>
+
+                    <div className="mb-6 flex items-center justify-between">
+
+                        <h2 className="text-xl font-bold">
+                            PSAK 69 Fair Value Report
+                        </h2>
+
+                        <span
+                            className="
+                                rounded-full
+                                bg-green-100
+                                px-3
+                                py-1
+                                text-xs
+                                font-semibold
+                                text-green-700
+                            "
+                        >
+                            PSAK 69
+                        </span>
+
+                    </div>
 
                     <div className="overflow-x-auto">
+
                         <table className="w-full">
+
                             <thead>
                                 <tr className="border-b">
+
                                     <th className="py-3 text-left">
                                         Tanggal
                                     </th>
@@ -252,26 +328,23 @@ export default function Dashboard({
                                     <th className="py-3 text-right">
                                         Nilai Wajar
                                     </th>
+
                                 </tr>
                             </thead>
 
                             <tbody>
+
                                 {fairValueReport.map((item) => (
                                     <tr
                                         key={item.id}
                                         className="border-b"
                                     >
                                         <td className="py-3">
-                                            {
-                                                item.tanggal_penilaian
-                                            }
+                                            {item.tanggal_penilaian}
                                         </td>
 
                                         <td className="py-3">
-                                            {
-                                                item.kolam
-                                                    ?.nama_kolam
-                                            }
+                                            {item.kolam?.nama_kolam}
                                         </td>
 
                                         <td className="py-3 text-right font-semibold text-green-600">
@@ -281,9 +354,13 @@ export default function Dashboard({
                                         </td>
                                     </tr>
                                 ))}
+
                             </tbody>
+
                         </table>
+
                     </div>
+
                 </div>
 
             </div>
