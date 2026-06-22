@@ -1,0 +1,310 @@
+import AppLayout from '@/layouts/app-layout';
+import { Head, Link, useForm } from '@inertiajs/react';
+import { ArrowLeft, Save } from 'lucide-react';
+
+interface Kolam {
+    id: number;
+    nama_kolam: string;
+}
+
+interface Pemasukan {
+    id: number;
+    kolam_id: number;
+    tanggal_panen: string;
+    berat_panen: number;
+    size: number;
+    harga_per_kg: number;
+}
+
+interface Props {
+    pemasukan: Pemasukan;
+    kolams: Kolam[];
+}
+
+export default function EditPemasukan({
+    pemasukan,
+    kolams,
+}: Props) {
+    const { data, setData, put, processing, errors } =
+        useForm({
+            kolam_id: String(pemasukan.kolam_id),
+            tanggal_panen: pemasukan.tanggal_panen,
+            berat_panen: String(pemasukan.berat_panen),
+            size: String(pemasukan.size),
+            harga_per_kg: String(pemasukan.harga_per_kg),
+        });
+
+    const totalPemasukan =
+        (Number(data.berat_panen) || 0) *
+        (Number(data.harga_per_kg) || 0);
+
+    const submit = (e: React.FormEvent) => {
+        e.preventDefault();
+
+        put(`/pemasukans/${pemasukan.id}`);
+    };
+
+    const rupiah = (value: number) => {
+        return new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0,
+        }).format(value);
+    };
+
+    return (
+        <AppLayout>
+            <Head title="Edit Panen" />
+
+            <div className="rounded-3xl border border-slate-100 bg-white p-8 shadow-sm">
+                {/* Header */}
+                <div className="mb-8 flex items-center justify-between">
+                    <div>
+                        <h1 className="text-2xl font-bold text-slate-900">
+                            Edit Data Panen
+                        </h1>
+
+                        <p className="mt-1 text-sm text-slate-500">
+                            Perbarui data hasil panen tambak.
+                        </p>
+                    </div>
+
+                    <Link
+                        href="/pemasukans"
+                        className="
+                            flex items-center gap-2
+                            rounded-full
+                            border border-slate-200
+                            px-5 py-3
+                            text-slate-700
+                            hover:bg-slate-50
+                        "
+                    >
+                        <ArrowLeft size={18} />
+                        Kembali
+                    </Link>
+                </div>
+
+                <form onSubmit={submit}>
+                    <div className="grid gap-6 md:grid-cols-2">
+
+                        {/* Kolam */}
+                        <div>
+                            <label className="mb-2 block text-sm font-medium text-slate-700">
+                                Kolam
+                            </label>
+
+                            <select
+                                value={data.kolam_id}
+                                onChange={(e) =>
+                                    setData(
+                                        'kolam_id',
+                                        e.target.value
+                                    )
+                                }
+                                className="
+                                    w-full
+                                    rounded-xl
+                                    border border-slate-200
+                                    px-4 py-3
+                                    focus:border-teal-500
+                                    focus:outline-none
+                                "
+                            >
+                                <option value="">
+                                    Pilih Kolam
+                                </option>
+
+                                {kolams.map((kolam) => (
+                                    <option
+                                        key={kolam.id}
+                                        value={kolam.id}
+                                    >
+                                        {kolam.nama_kolam}
+                                    </option>
+                                ))}
+                            </select>
+
+                            {errors.kolam_id && (
+                                <div className="mt-1 text-sm text-red-500">
+                                    {errors.kolam_id}
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Tanggal */}
+                        <div>
+                            <label className="mb-2 block text-sm font-medium text-slate-700">
+                                Tanggal Panen
+                            </label>
+
+                            <input
+                                type="date"
+                                value={data.tanggal_panen}
+                                onChange={(e) =>
+                                    setData(
+                                        'tanggal_panen',
+                                        e.target.value
+                                    )
+                                }
+                                className="
+                                    w-full
+                                    rounded-xl
+                                    border border-slate-200
+                                    px-4 py-3
+                                    focus:border-teal-500
+                                    focus:outline-none
+                                "
+                            />
+
+                            {errors.tanggal_panen && (
+                                <div className="mt-1 text-sm text-red-500">
+                                    {errors.tanggal_panen}
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Berat Panen */}
+                        <div>
+                            <label className="mb-2 block text-sm font-medium text-slate-700">
+                                Berat Panen (Kg)
+                            </label>
+
+                            <input
+                                type="number"
+                                step="0.01"
+                                value={data.berat_panen}
+                                onChange={(e) =>
+                                    setData(
+                                        'berat_panen',
+                                        e.target.value
+                                    )
+                                }
+                                className="
+                                    w-full
+                                    rounded-xl
+                                    border border-slate-200
+                                    px-4 py-3
+                                    focus:border-teal-500
+                                    focus:outline-none
+                                "
+                            />
+
+                            {errors.berat_panen && (
+                                <div className="mt-1 text-sm text-red-500">
+                                    {errors.berat_panen}
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Size */}
+                        <div>
+                            <label className="mb-2 block text-sm font-medium text-slate-700">
+                                Size Udang
+                            </label>
+
+                            <input
+                                type="number"
+                                value={data.size}
+                                onChange={(e) =>
+                                    setData(
+                                        'size',
+                                        e.target.value
+                                    )
+                                }
+                                className="
+                                    w-full
+                                    rounded-xl
+                                    border border-slate-200
+                                    px-4 py-3
+                                    focus:border-teal-500
+                                    focus:outline-none
+                                "
+                            />
+
+                            {errors.size && (
+                                <div className="mt-1 text-sm text-red-500">
+                                    {errors.size}
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Harga */}
+                        <div>
+                            <label className="mb-2 block text-sm font-medium text-slate-700">
+                                Harga per Kg
+                            </label>
+
+                            <input
+                                type="number"
+                                value={data.harga_per_kg}
+                                onChange={(e) =>
+                                    setData(
+                                        'harga_per_kg',
+                                        e.target.value
+                                    )
+                                }
+                                className="
+                                    w-full
+                                    rounded-xl
+                                    border border-slate-200
+                                    px-4 py-3
+                                    focus:border-teal-500
+                                    focus:outline-none
+                                "
+                            />
+
+                            {errors.harga_per_kg && (
+                                <div className="mt-1 text-sm text-red-500">
+                                    {errors.harga_per_kg}
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Total */}
+                        <div>
+                            <label className="mb-2 block text-sm font-medium text-slate-700">
+                                Total Pemasukan
+                            </label>
+
+                            <div
+                                className="
+                                    rounded-xl
+                                    border
+                                    border-green-200
+                                    bg-green-50
+                                    px-4
+                                    py-3
+                                    font-bold
+                                    text-green-700
+                                "
+                            >
+                                {rupiah(totalPemasukan)}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Footer */}
+                    <div className="mt-8 flex justify-end">
+                        <button
+                            type="submit"
+                            disabled={processing}
+                            className="
+                                flex items-center gap-2
+                                rounded-full
+                                bg-[#0D9488]
+                                px-6 py-3
+                                font-semibold
+                                text-white
+                                hover:bg-[#0F766E]
+                            "
+                        >
+                            <Save size={18} />
+                            Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </AppLayout>
+    );
+}
