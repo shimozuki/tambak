@@ -16,24 +16,7 @@ use Laravel\Fortify\Features;
 Route::get(
     '/',
     [LandingController::class, 'index']
-)->name('landing');
-
-Route::get(
-    '/hasil-panen',
-    [LandingController::class, 'hasilPanen']
-)->name('hasil-panen');
-
-Route::get(
-    '/stok-udang',
-    [LandingController::class, 'stokUdang']
-)->name('stok-udang');
-
-Route::get(
-    '/tentang',
-    [LandingController::class, 'tentang']
-)->name('tentang');
-
-
+)->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
