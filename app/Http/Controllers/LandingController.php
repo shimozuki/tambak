@@ -17,7 +17,7 @@ class LandingController extends Controller
             'stats' => [
                 'total_kolam' => Kolam::count(),
 
-                'total_panen' => Pemasukan::sum(
+                'total_panen' => Panen::sum(
                     'berat_panen'
                 ),
 
@@ -26,7 +26,7 @@ class LandingController extends Controller
                 ),
             ],
 
-            'panenTerbaru' => Pemasukan::with('kolam')
+            'panenTerbaru' => Panen::with('kolam')
                 ->latest('tanggal_panen')
                 ->take(6)
                 ->get(),
@@ -38,7 +38,7 @@ class LandingController extends Controller
     {
         $totalKolam = Kolam::count();
 
-        $totalProduksi = Pemasukan::sum(
+        $totalProduksi = Panen::sum(
             'berat_panen'
         );
 
