@@ -10,6 +10,7 @@ Package,
 Wallet,
 Landmark,
 FileText,
+DollarSign,
 Settings,
 Users,
 UserCheck,
@@ -195,12 +196,21 @@ export function SidebarContent({
     />
 
     <NavItem
+        icon={<DollarSign size={20} />}
+        label="Penjualan"
+        href="/penjualans"
+        isCollapsed={isCollapsed}
+        active={isActive('/penjualans')}
+    />
+
+    <NavItem
         icon={<Landmark size={20} />}
         label="Panen"
         href="/pemasukans"
         isCollapsed={isCollapsed}
         active={isActive('/pemasukans')}
     />
+    
 </nav>
 
 <nav className="space-y-1"> <NavItem icon={<Fish size={20} />} label="Aset Biologis" href="/aset-biologis" isCollapsed={isCollapsed} active={isActive('/aset-biologis')} /> </nav>
