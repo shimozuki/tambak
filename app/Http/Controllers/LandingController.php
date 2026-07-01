@@ -83,4 +83,18 @@ class LandingController extends Controller
             ]
         );
     }
+
+    public function stokUdang()
+    {
+        $stokUdang = AsetBiologis::with('kolam')
+            ->latest('tanggal_penilaian')
+            ->get();
+
+        return Inertia::render(
+            'stok-udang-public',
+            [
+                'stokUdang' => $stokUdang,
+            ]
+        );
+    }
 }

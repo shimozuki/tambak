@@ -1,6 +1,6 @@
 import { dashboard } from '@/routes';
 import { edit } from '@/routes/profile';
-import { Link, usePage } from '@inertiajs/react';
+import { Link, usePage, router } from '@inertiajs/react';
 import {
 ChevronLeft,
 ChevronRight,

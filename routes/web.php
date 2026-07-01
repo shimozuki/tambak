@@ -31,6 +31,11 @@ Route::get(
     [LandingController::class, 'hasilPanen']
 );
 
+Route::get(
+    '/stok-udang-public',
+    [LandingController::class, 'stokUdang']
+);
+
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get(

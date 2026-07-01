@@ -60,7 +60,7 @@ export default function Navbar() {
                     </Link>
 
                     <Link
-                        href="/stok-udang"
+                        href="/stok-udang-public"
                         className="
                             font-medium
                             text-slate-600

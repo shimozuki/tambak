@@ -21,6 +21,7 @@ class AsetBiologis extends Model
         'total_berat',
         'harga_pasar',
         'nilai_wajar',
+        'stok_publik_kg',
     ];
 
     protected $casts = [
