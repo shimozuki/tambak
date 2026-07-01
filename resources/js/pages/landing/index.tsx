@@ -4,7 +4,6 @@ import Navbar from '@/components/landing/Navbar';
 import Hero from '@/components/landing/Hero';
 import Stats from '@/components/landing/Stats';
 import Features from '@/components/landing/Features';
-import HarvestCards from '@/components/landing/HarvestCards';
 import PsakBanner from '@/components/landing/PsakBanner';
 import Footer from '@/components/landing/Footer';
 
@@ -13,7 +12,6 @@ interface Panen {
     tanggal_panen: string;
     berat_panen: number;
     size: number;
-    harga_per_kg: number;
 
     kolam: {
         nama_kolam: string;
@@ -32,7 +30,6 @@ interface Props {
 
 export default function Landing({
     stats,
-    panenTerbaru,
 }: Props) {
     return (
         <>
@@ -55,11 +52,6 @@ export default function Landing({
 
                 {/* Features */}
                 <Features />
-
-                {/* Panen Terbaru */}
-                <HarvestCards
-                    panenTerbaru={panenTerbaru}
-                />
 
                 {/* PSAK Banner */}
                 <PsakBanner />

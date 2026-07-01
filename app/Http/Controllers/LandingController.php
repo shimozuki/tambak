@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Kolam;
 use App\Models\Pemasukan;
 use App\Models\AsetBiologis;
+use App\Models\Panen;
 use Inertia\Inertia;
 
 class LandingController extends Controller
@@ -71,7 +72,7 @@ class LandingController extends Controller
 
     public function hasilPanen()
     {
-        $panens = Pemasukan::with('kolam')
+        $panens = Panen::with('kolam')
             ->latest('tanggal_panen')
             ->paginate(10);
 
