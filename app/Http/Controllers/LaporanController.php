@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pengeluaran;
 use App\Models\Pemasukan;
+use App\Models\Penjualan;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -15,12 +16,12 @@ class LaporanController extends Controller
         $tanggalAwal = $request->tanggal_awal;
         $tanggalAkhir = $request->tanggal_akhir;
 
-        $pemasukan = Pemasukan::query()
+        $pemasukan = Penjualan::query()
             ->when(
                 $tanggalAwal,
                 fn($q) =>
                 $q->whereDate(
-                    'tanggal_panen',
+                    'tanggal_penjualan',
                     '>=',
                     $tanggalAwal
                 )
@@ -29,7 +30,7 @@ class LaporanController extends Controller
                 $tanggalAkhir,
                 fn($q) =>
                 $q->whereDate(
-                    'tanggal_panen',
+                    'tanggal_penjualan',
                     '<=',
                     $tanggalAkhir
                 )
@@ -57,7 +58,7 @@ class LaporanController extends Controller
 
         $totalPemasukan =
             (clone $pemasukan)
-            ->sum('total_pemasukan');
+            ->sum('jumlah_penjualan');
 
         $totalPengeluaran =
             (clone $pengeluaran)
@@ -88,8 +89,7 @@ class LaporanController extends Controller
 
                 'pemasukans' =>
                 $pemasukan
-                    ->with('kolam')
-                    ->latest()
+                    ->latest('tanggal_penjualan')
                     ->get(),
 
                 'pengeluarans' =>
@@ -109,12 +109,12 @@ class LaporanController extends Controller
         $tanggalAwal = $request->tanggal_awal;
         $tanggalAkhir = $request->tanggal_akhir;
 
-        $pemasukan = Pemasukan::with('kolam')
+        $pemasukan = Penjualan::query()
             ->when(
                 $tanggalAwal,
                 fn($q) =>
                 $q->whereDate(
-                    'tanggal_panen',
+                    'tanggal_penjualan',
                     '>=',
                     $tanggalAwal
                 )
@@ -123,7 +123,7 @@ class LaporanController extends Controller
                 $tanggalAkhir,
                 fn($q) =>
                 $q->whereDate(
-                    'tanggal_panen',
+                    'tanggal_penjualan',
                     '<=',
                     $tanggalAkhir
                 )
@@ -155,7 +155,9 @@ class LaporanController extends Controller
             ->get();
 
         $totalPemasukan =
-            $pemasukan->sum('total_pemasukan');
+            $pemasukan->sum(
+                'jumlah_penjualan'
+            );
 
         $totalPengeluaran =
             $pengeluaran->sum('jumlah');

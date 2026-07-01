@@ -193,21 +193,21 @@ export default function CreateAsetBiologis({
                         </div>
 
                         {/* Berat Rata-rata */}
-                        <div>
+                       <div>
                             <label className="mb-2 block text-sm font-medium">
-                                Berat Rata-rata (Kg)
+                                Size Udang (ekor/kg)
                             </label>
 
                             <input
                                 type="number"
-                                step="0.01"
-                                value={data.berat_rata_rata}
+                                value={data.size_udang}
                                 onChange={(e) =>
                                     setData(
-                                        'berat_rata_rata',
+                                        'size_udang',
                                         e.target.value
                                     )
                                 }
+                                placeholder="Contoh: 50"
                                 className="w-full rounded-xl border border-slate-200 px-4 py-3"
                             />
                         </div>

@@ -79,10 +79,10 @@ class AsetBiologisController extends Controller
                 'max:100',
             ],
 
-            'berat_rata_rata' => [
+            'size_udang' => [
                 'required',
-                'numeric',
-                'min:0',
+                'integer',
+                'min:1',
             ],
 
             'harga_pasar' => [
@@ -97,8 +97,8 @@ class AsetBiologisController extends Controller
             ($validated['survival_rate'] / 100);
 
         $totalBerat =
-            $jumlahUdangHidup *
-            $validated['berat_rata_rata'];
+            $jumlahUdangHidup /
+            $validated['size_udang'];
 
         $nilaiWajar =
             $totalBerat *
@@ -110,7 +110,7 @@ class AsetBiologisController extends Controller
             'jumlah_benur' => $validated['jumlah_benur'],
             'survival_rate' => $validated['survival_rate'],
             'jumlah_udang_hidup' => round($jumlahUdangHidup),
-            'berat_rata_rata' => $validated['berat_rata_rata'],
+            'size_udang' => $validated['size_udang'],
             'total_berat' => $totalBerat,
             'harga_pasar' => $validated['harga_pasar'],
             'nilai_wajar' => $nilaiWajar,
@@ -127,15 +127,17 @@ class AsetBiologisController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(AsetBiologis $asetBiologi)
-    {
-        return Inertia::render('aset-biologis/edit', [
-            'asetBiologis' => $asetBiologi,
+    public function edit(
+        AsetBiologis $asetBiologi
+    ) {
+        return Inertia::render(
+            'aset-biologis/edit',
+            [
+                'asetBiologi' => $asetBiologi,
 
-            'kolams' => Kolam::orderBy(
-                'nama_kolam'
-            )->get(),
-        ]);
+                'kolams' => Kolam::all(),
+            ]
+        );
     }
 
     /**
@@ -169,10 +171,10 @@ class AsetBiologisController extends Controller
                 'max:100',
             ],
 
-            'berat_rata_rata' => [
+            'size_udang' => [
                 'required',
-                'numeric',
-                'min:0',
+                'integer',
+                'min:1',
             ],
 
             'harga_pasar' => [
@@ -187,8 +189,8 @@ class AsetBiologisController extends Controller
             ($validated['survival_rate'] / 100);
 
         $totalBerat =
-            $jumlahUdangHidup *
-            $validated['berat_rata_rata'];
+            $jumlahUdangHidup /
+            $validated['size_udang'];
 
         $nilaiWajar =
             $totalBerat *
@@ -200,7 +202,7 @@ class AsetBiologisController extends Controller
             'jumlah_benur' => $validated['jumlah_benur'],
             'survival_rate' => $validated['survival_rate'],
             'jumlah_udang_hidup' => round($jumlahUdangHidup),
-            'berat_rata_rata' => $validated['berat_rata_rata'],
+            'size_udang' => $validated['size_udang'],
             'total_berat' => $totalBerat,
             'harga_pasar' => $validated['harga_pasar'],
             'nilai_wajar' => $nilaiWajar,

@@ -20,12 +20,7 @@ export default function CreatePemasukan({
             tanggal_panen: '',
             berat_panen: '',
             size: '',
-            harga_per_kg: '',
         });
-
-    const totalPemasukan =
-        (Number(data.berat_panen) || 0) *
-        (Number(data.harga_per_kg) || 0);
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -33,13 +28,6 @@ export default function CreatePemasukan({
         post('/pemasukans');
     };
 
-    const rupiah = (value: number) => {
-        return new Intl.NumberFormat('id-ID', {
-            style: 'currency',
-            currency: 'IDR',
-            minimumFractionDigits: 0,
-        }).format(value);
-    };
 
     return (
         <AppLayout>
@@ -220,60 +208,6 @@ export default function CreatePemasukan({
                             )}
                         </div>
 
-                        {/* Harga */}
-                        <div>
-                            <label className="mb-2 block text-sm font-medium text-slate-700">
-                                Harga per Kg
-                            </label>
-
-                            <input
-                                type="number"
-                                value={data.harga_per_kg}
-                                onChange={(e) =>
-                                    setData(
-                                        'harga_per_kg',
-                                        e.target.value
-                                    )
-                                }
-                                placeholder="85000"
-                                className="
-                                    w-full
-                                    rounded-xl
-                                    border border-slate-200
-                                    px-4 py-3
-                                    focus:border-teal-500
-                                    focus:outline-none
-                                "
-                            />
-
-                            {errors.harga_per_kg && (
-                                <div className="mt-1 text-sm text-red-500">
-                                    {errors.harga_per_kg}
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Total */}
-                        <div>
-                            <label className="mb-2 block text-sm font-medium text-slate-700">
-                                Total Pemasukan
-                            </label>
-
-                            <div
-                                className="
-                                    rounded-xl
-                                    border
-                                    border-green-200
-                                    bg-green-50
-                                    px-4
-                                    py-3
-                                    font-bold
-                                    text-green-700
-                                "
-                            >
-                                {rupiah(totalPemasukan)}
-                            </div>
-                        </div>
                     </div>
 
                     {/* Footer */}

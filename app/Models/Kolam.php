@@ -38,13 +38,18 @@ class Kolam extends Model
         return $this->hasMany(Pengeluaran::class);
     }
 
-    public function pemasukans()
+    public function panens()
     {
-        return $this->hasMany(Pemasukan::class);
+        return $this->hasMany(Panen::class);
     }
 
     public function asetBiologis()
     {
         return $this->hasMany(AsetBiologis::class);
+    }
+
+    public function penjualans()
+    {
+        return $this->hasMany(Penjualan::class);
     }
 }

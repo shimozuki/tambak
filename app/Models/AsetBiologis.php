@@ -17,7 +17,7 @@ class AsetBiologis extends Model
         'jumlah_benur',
         'survival_rate',
         'jumlah_udang_hidup',
-        'berat_rata_rata',
+        'size_udang',
         'total_berat',
         'harga_pasar',
         'nilai_wajar',
@@ -25,9 +25,13 @@ class AsetBiologis extends Model
 
     protected $casts = [
         'survival_rate' => 'decimal:2',
-        'berat_rata_rata' => 'decimal:2',
+
+        'size_udang' => 'integer',
+
         'total_berat' => 'decimal:2',
+
         'harga_pasar' => 'decimal:2',
+
         'nilai_wajar' => 'decimal:2',
     ];
 

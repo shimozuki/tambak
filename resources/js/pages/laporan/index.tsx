@@ -212,60 +212,73 @@ return (
 
             </div>
 
-            {/* Pemasukan */}
-            <div className="rounded-3xl bg-white p-6 shadow-sm">
+            {/* Penjualan */}
+<div className="rounded-3xl bg-white p-6 shadow-sm">
 
-                <h2 className="mb-4 text-lg font-bold">
-                    Data Pemasukan
-                </h2>
+    <h2 className="mb-4 text-lg font-bold">
+        Data Penjualan
+    </h2>
 
-                <table className="w-full">
-                    <thead>
-                        <tr className="border-b">
-                            <th className="py-3 text-left">
-                                Tanggal
-                            </th>
+    <table className="w-full">
 
-                            <th className="py-3 text-left">
-                                Kolam
-                            </th>
+        <thead>
+            <tr className="border-b">
 
-                            <th className="py-3 text-right">
-                                Total
-                            </th>
-                        </tr>
-                    </thead>
+                <th className="py-3 text-left">
+                    Tanggal
+                </th>
 
-                    <tbody>
-                        {pemasukans.map((item) => (
-                            <tr
-                                key={item.id}
-                                className="border-b"
-                            >
-                                <td className="py-3">
-                                    {
-                                        item.tanggal_panen
-                                    }
-                                </td>
+                <th className="py-3 text-left">
+                    Keterangan
+                </th>
 
-                                <td className="py-3">
-                                    {
-                                        item.kolam
-                                            ?.nama_kolam
-                                    }
-                                </td>
+                <th className="py-3 text-right">
+                    Jumlah
+                </th>
 
-                                <td className="py-3 text-right font-semibold text-green-600">
-                                    {rupiah(
-                                        item.total_pemasukan
-                                    )}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+            </tr>
+        </thead>
 
-            </div>
+        <tbody>
+
+            {pemasukans.map((item) => (
+                <tr
+                    key={item.id}
+                    className="border-b"
+                >
+
+                    <td className="py-3">
+                        {new Date(
+                            item.tanggal_penjualan
+                        ).toLocaleDateString(
+                            'id-ID',
+                            {
+                                day: '2-digit',
+                                month: 'long',
+                                year: 'numeric',
+                            }
+                        )}
+                    </td>
+
+                    <td className="py-3">
+                        {item.keterangan ??
+                            '-'}
+                    </td>
+
+                    <td className="py-3 text-right font-semibold text-green-600">
+                        {rupiah(
+                            item.jumlah_penjualan
+                        )}
+                    </td>
+
+                </tr>
+            ))}
+
+        </tbody>
+
+    </table>
+
+</div>
 
             {/* Pengeluaran */}
             <div className="rounded-3xl bg-white p-6 shadow-sm">
@@ -297,8 +310,17 @@ return (
                                 key={item.id}
                                 className="border-b"
                             >
-                                <td className="py-3">
-                                    {item.tanggal}
+                                    <td className="py-3">
+                                    {new Date(
+                                        item.tanggal
+                                    ).toLocaleDateString(
+                                        'id-ID',
+                                        {
+                                            day: '2-digit',
+                                            month: 'long',
+                                            year: 'numeric',
+                                        }
+                                    )}
                                 </td>
 
                                 <td className="py-3">

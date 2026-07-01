@@ -7,6 +7,7 @@ use App\Models\Benur;
 use App\Models\Pemasukan;
 use App\Models\Pengeluaran;
 use App\Models\AsetBiologis;
+use App\Models\Penjualan;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
@@ -24,7 +25,9 @@ class DashboardController extends Controller
         $totalBenur = Benur::sum('jumlah_benur');
 
         $totalPemasukan =
-            Pemasukan::sum('total_pemasukan');
+            Penjualan::sum(
+                'jumlah_penjualan'
+            );
 
         $totalPengeluaran =
             Pengeluaran::sum('jumlah');

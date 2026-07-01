@@ -78,17 +78,26 @@ export default function PemasukanIndex({
         });
     };
 
-    const rupiah = (value: number) => {
-        return new Intl.NumberFormat('id-ID', {
-            style: 'currency',
-            currency: 'IDR',
-            minimumFractionDigits: 0,
-        }).format(value);
-    };
+    const totalProduksi =
+    pemasukans.data.reduce(
+        (total, item) =>
+            total + Number(item.berat_panen),
+        0
+    );
 
     return (
         <AppLayout>
             <Head title="Data Panen" />
+
+            <div className="mb-6 rounded-3xl bg-white p-6 shadow-sm">
+                <h3 className="text-sm text-slate-500">
+                    Total Produksi Panen
+                </h3>
+
+                <div className="mt-2 text-3xl font-bold text-teal-600">
+                    {totalProduksi.toLocaleString()} Kg
+                </div>
+            </div>
 
             <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-sm">
 
@@ -181,14 +190,6 @@ export default function PemasukanIndex({
                                     Size
                                 </th>
 
-                                <th className="px-4 py-3 text-right text-sm font-semibold text-slate-600">
-                                    Harga / Kg
-                                </th>
-
-                                <th className="px-4 py-3 text-right text-sm font-semibold text-slate-600">
-                                    Total
-                                </th>
-
                                 <th className="px-4 py-3 text-center text-sm font-semibold text-slate-600">
                                     Aksi
                                 </th>
@@ -218,28 +219,17 @@ export default function PemasukanIndex({
                                                 }
                                             </td>
 
-                                            <td className="px-4 py-4 text-right">
-                                                {
+                                           <td className="px-6 py-4 text-right">
+                                                {Number(
                                                     pemasukan.berat_panen
-                                                }
+                                                ).toLocaleString()}
+                                                {' '}Kg
                                             </td>
 
                                             <td className="px-4 py-4 text-center">
                                                 {
                                                     pemasukan.size
                                                 }
-                                            </td>
-
-                                            <td className="px-4 py-4 text-right">
-                                                {rupiah(
-                                                    pemasukan.harga_per_kg
-                                                )}
-                                            </td>
-
-                                            <td className="px-4 py-4 text-right font-semibold text-green-600">
-                                                {rupiah(
-                                                    pemasukan.total_pemasukan
-                                                )}
                                             </td>
 
                                             <td className="px-4 py-4">

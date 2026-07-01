@@ -7,6 +7,12 @@
     <style>
         body {
             font-family: sans-serif;
+            font-size: 12px;
+        }
+
+        h2,
+        h3 {
+            margin-bottom: 10px;
         }
 
         table {
@@ -24,6 +30,14 @@
             background: #0D9488;
             color: white;
         }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .summary {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 
@@ -35,16 +49,17 @@
 
     <p>
         Periode :
-        {{ $tanggalAwal }}
+        {{ $tanggalAwal ?: '-' }}
         -
-        {{ $tanggalAkhir }}
+        {{ $tanggalAkhir ?: '-' }}
     </p>
 
     <hr>
 
+    {{-- Ringkasan --}}
     <h3>Ringkasan</h3>
 
-    <table>
+    <table class="summary">
         <tr>
             <th>Total Pemasukan</th>
             <th>Total Pengeluaran</th>
@@ -52,74 +67,84 @@
         </tr>
 
         <tr>
-            <td>
-                Rp
-                {{ number_format($totalPemasukan,0,',','.') }}
+            <td class="text-right">
+                Rp {{ number_format($totalPemasukan, 0, ',', '.') }}
             </td>
 
-            <td>
-                Rp
-                {{ number_format($totalPengeluaran,0,',','.') }}
+            <td class="text-right">
+                Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}
             </td>
 
-            <td>
-                Rp
-                {{ number_format($labaBersih,0,',','.') }}
+            <td class="text-right">
+                Rp {{ number_format($labaBersih, 0, ',', '.') }}
             </td>
         </tr>
     </table>
 
-    <br>
-
-    <h3>Data Pemasukan</h3>
+    {{-- Penjualan --}}
+    <h3>Data Penjualan</h3>
 
     <table>
         <thead>
             <tr>
-                <th>Tanggal</th>
-                <th>Kolam</th>
-                <th>Total</th>
+                <th width="25%">Tanggal</th>
+                <th>Keterangan</th>
+                <th width="25%">Jumlah</th>
             </tr>
         </thead>
 
         <tbody>
-            @foreach($pemasukan as $item)
+
+            @forelse($pemasukan as $item)
             <tr>
+
                 <td>
-                    {{ $item->tanggal_panen }}
+                    {{ \Carbon\Carbon::parse($item->tanggal_penjualan)->format('d-m-Y') }}
                 </td>
 
                 <td>
-                    {{ $item->kolam->nama_kolam }}
+                    {{ $item->keterangan ?? '-' }}
                 </td>
 
-                <td>
-                    Rp
-                    {{ number_format($item->total_pemasukan,0,',','.') }}
+                <td class="text-right">
+                    Rp {{ number_format($item->jumlah_penjualan, 0, ',', '.') }}
+                </td>
+
+            </tr>
+            @empty
+            <tr>
+                <td colspan="3" style="text-align:center">
+                    Tidak ada data penjualan
                 </td>
             </tr>
-            @endforeach
+            @endforelse
+
         </tbody>
     </table>
 
     <br>
 
+    {{-- Pengeluaran --}}
     <h3>Data Pengeluaran</h3>
 
     <table>
         <thead>
             <tr>
-                <th>Tanggal</th>
+                <th width="20%">Tanggal</th>
                 <th>Kategori</th>
-                <th>Jumlah</th>
+                <th>Keterangan</th>
+                <th width="20%">Jumlah</th>
             </tr>
         </thead>
 
         <tbody>
-            @foreach($pengeluaran as $item)
+
+            @forelse($pengeluaran as $item)
+
             <tr>
+
                 <td>
-                    {{ $item->tanggal }}
+                    {{ \Carbon\Carbon::parse($item->tanggal)->format('d-m-Y') }}
                 </td>
 
                 <td>
@@ -127,11 +152,25 @@
                 </td>
 
                 <td>
-                    Rp
-                    {{ number_format($item->jumlah,0,',','.') }}
+                    {{ $item->keterangan ?? '-' }}
+                </td>
+
+                <td class="text-right">
+                    Rp {{ number_format($item->jumlah, 0, ',', '.') }}
+                </td>
+
+            </tr>
+
+            @empty
+
+            <tr>
+                <td colspan="4" style="text-align:center">
+                    Tidak ada data pengeluaran
                 </td>
             </tr>
-            @endforeach
+
+            @endforelse
+
         </tbody>
     </table>
 

@@ -2,62 +2,80 @@ import AppLayout from '@/layouts/app-layout';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { ArrowLeft, Save } from 'lucide-react';
 
-interface Kolam {
+interface Penjualan {
     id: number;
-    nama_kolam: string;
-}
-
-interface Pemasukan {
-    id: number;
-    kolam_id: number;
-    tanggal_panen: string;
-    berat_panen: number;
-    size: number;
+    tanggal_penjualan: string;
+    jumlah_penjualan: number;
+    keterangan: string | null;
 }
 
 interface Props {
-    pemasukan: Pemasukan;
-    kolams: Kolam[];
+    penjualan: Penjualan;
 }
 
-export default function EditPemasukan({
-    pemasukan,
-    kolams,
+export default function EditPenjualan({
+    penjualan,
 }: Props) {
-    const { data, setData, put, processing, errors } =
-        useForm({
-            kolam_id: String(pemasukan.kolam_id),
-            tanggal_panen: pemasukan.tanggal_panen,
-            berat_panen: String(pemasukan.berat_panen),
-            size: String(pemasukan.size),
-        });
+    const {
+        data,
+        setData,
+        put,
+        processing,
+        errors,
+    } = useForm({
+        tanggal_penjualan:
+            penjualan.tanggal_penjualan,
+        jumlah_penjualan: String(
+            penjualan.jumlah_penjualan
+        ),
+        keterangan:
+            penjualan.keterangan ?? '',
+    });
 
-
-    const submit = (e: React.FormEvent) => {
+    const submit = (
+        e: React.FormEvent
+    ) => {
         e.preventDefault();
 
-        put(`/pemasukans/${pemasukan.id}`);
+        put(
+            `/penjualans/${penjualan.id}`
+        );
     };
+
+    const rupiah = (
+        value: number
+    ) =>
+        new Intl.NumberFormat(
+            'id-ID',
+            {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0,
+            }
+        ).format(value);
 
     return (
         <AppLayout>
-            <Head title="Edit Panen" />
+            <Head title="Edit Penjualan" />
 
             <div className="rounded-3xl border border-slate-100 bg-white p-8 shadow-sm">
+
                 {/* Header */}
                 <div className="mb-8 flex items-center justify-between">
+
                     <div>
                         <h1 className="text-2xl font-bold text-slate-900">
-                            Edit Data Panen
+                            Edit Penjualan
                         </h1>
 
                         <p className="mt-1 text-sm text-slate-500">
-                            Perbarui data hasil panen tambak.
+                            Perbarui data
+                            penjualan udang.
                         </p>
                     </div>
 
                     <Link
-                        href="/pemasukans"
+                        href="/penjualans"
                         className="
                             flex items-center gap-2
                             rounded-full
@@ -70,68 +88,29 @@ export default function EditPemasukan({
                         <ArrowLeft size={18} />
                         Kembali
                     </Link>
+
                 </div>
 
                 <form onSubmit={submit}>
-                    <div className="grid gap-6 md:grid-cols-2">
 
-                        {/* Kolam */}
-                        <div>
-                            <label className="mb-2 block text-sm font-medium text-slate-700">
-                                Kolam
-                            </label>
-
-                            <select
-                                value={data.kolam_id}
-                                onChange={(e) =>
-                                    setData(
-                                        'kolam_id',
-                                        e.target.value
-                                    )
-                                }
-                                className="
-                                    w-full
-                                    rounded-xl
-                                    border border-slate-200
-                                    px-4 py-3
-                                    focus:border-teal-500
-                                    focus:outline-none
-                                "
-                            >
-                                <option value="">
-                                    Pilih Kolam
-                                </option>
-
-                                {kolams.map((kolam) => (
-                                    <option
-                                        key={kolam.id}
-                                        value={kolam.id}
-                                    >
-                                        {kolam.nama_kolam}
-                                    </option>
-                                ))}
-                            </select>
-
-                            {errors.kolam_id && (
-                                <div className="mt-1 text-sm text-red-500">
-                                    {errors.kolam_id}
-                                </div>
-                            )}
-                        </div>
+                    <div className="grid gap-6">
 
                         {/* Tanggal */}
                         <div>
                             <label className="mb-2 block text-sm font-medium text-slate-700">
-                                Tanggal Panen
+                                Tanggal Penjualan
                             </label>
 
                             <input
                                 type="date"
-                                value={data.tanggal_panen}
+                                value={
+                                    data.tanggal_penjualan
+                                }
                                 onChange={(e) =>
                                     setData(
-                                        'tanggal_panen',
-                                        e.target.value
+                                        'tanggal_penjualan',
+                                        e.target
+                                            .value
                                     )
                                 }
                                 className="
@@ -139,32 +118,34 @@ export default function EditPemasukan({
                                     rounded-xl
                                     border border-slate-200
                                     px-4 py-3
-                                    focus:border-teal-500
-                                    focus:outline-none
                                 "
                             />
 
-                            {errors.tanggal_panen && (
+                            {errors.tanggal_penjualan && (
                                 <div className="mt-1 text-sm text-red-500">
-                                    {errors.tanggal_panen}
+                                    {
+                                        errors.tanggal_penjualan
+                                    }
                                 </div>
                             )}
                         </div>
 
-                        {/* Berat Panen */}
+                        {/* Jumlah */}
                         <div>
                             <label className="mb-2 block text-sm font-medium text-slate-700">
-                                Berat Panen (Kg)
+                                Jumlah Penjualan
                             </label>
 
                             <input
                                 type="number"
-                                step="0.01"
-                                value={data.berat_panen}
+                                value={
+                                    data.jumlah_penjualan
+                                }
                                 onChange={(e) =>
                                     setData(
-                                        'berat_panen',
-                                        e.target.value
+                                        'jumlah_penjualan',
+                                        e.target
+                                            .value
                                     )
                                 }
                                 className="
@@ -172,31 +153,51 @@ export default function EditPemasukan({
                                     rounded-xl
                                     border border-slate-200
                                     px-4 py-3
-                                    focus:border-teal-500
-                                    focus:outline-none
                                 "
                             />
 
-                            {errors.berat_panen && (
+                            {errors.jumlah_penjualan && (
                                 <div className="mt-1 text-sm text-red-500">
-                                    {errors.berat_panen}
+                                    {
+                                        errors.jumlah_penjualan
+                                    }
                                 </div>
                             )}
                         </div>
 
-                        {/* Size */}
+                        {/* Preview */}
+                        <div className="rounded-2xl bg-green-50 p-5">
+
+                            <div className="text-sm text-green-700">
+                                Nilai Penjualan
+                            </div>
+
+                            <div className="mt-2 text-3xl font-bold text-green-600">
+                                {rupiah(
+                                    Number(
+                                        data.jumlah_penjualan
+                                    )
+                                )}
+                            </div>
+
+                        </div>
+
+                        {/* Keterangan */}
                         <div>
                             <label className="mb-2 block text-sm font-medium text-slate-700">
-                                Size Udang
+                                Keterangan
                             </label>
 
-                            <input
-                                type="number"
-                                value={data.size}
+                            <textarea
+                                rows={4}
+                                value={
+                                    data.keterangan
+                                }
                                 onChange={(e) =>
                                     setData(
-                                        'size',
-                                        e.target.value
+                                        'keterangan',
+                                        e.target
+                                            .value
                                     )
                                 }
                                 className="
@@ -204,24 +205,27 @@ export default function EditPemasukan({
                                     rounded-xl
                                     border border-slate-200
                                     px-4 py-3
-                                    focus:border-teal-500
-                                    focus:outline-none
                                 "
                             />
 
-                            {errors.size && (
+                            {errors.keterangan && (
                                 <div className="mt-1 text-sm text-red-500">
-                                    {errors.size}
+                                    {
+                                        errors.keterangan
+                                    }
                                 </div>
                             )}
                         </div>
+
                     </div>
 
-                    {/* Footer */}
                     <div className="mt-8 flex justify-end">
+
                         <button
                             type="submit"
-                            disabled={processing}
+                            disabled={
+                                processing
+                            }
                             className="
                                 flex items-center gap-2
                                 rounded-full
@@ -229,14 +233,16 @@ export default function EditPemasukan({
                                 px-6 py-3
                                 font-semibold
                                 text-white
-                                hover:bg-[#0F766E]
                             "
                         >
                             <Save size={18} />
                             Update
                         </button>
+
                     </div>
+
                 </form>
+
             </div>
         </AppLayout>
     );

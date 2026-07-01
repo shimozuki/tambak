@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kolam;
+use App\Models\Panen;
 use Inertia\Inertia;
-use App\Models\Pemasukan;
 use Illuminate\Http\Request;
 
 class PemasukanController extends Controller
@@ -13,7 +13,7 @@ class PemasukanController extends Controller
     {
         $search = $request->search;
 
-        $pemasukans = Pemasukan::with('kolam')
+        $pemasukans = Panen::with('kolam')
             ->when($search, function ($query) use ($search) {
                 $query->whereHas('kolam', function ($q) use ($search) {
                     $q->where(
@@ -27,21 +27,28 @@ class PemasukanController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return Inertia::render('pemasukan/index', [
-            'pemasukans' => $pemasukans,
-            'filters' => [
-                'search' => $search,
-            ],
-        ]);
+        return Inertia::render(
+            'pemasukan/index',
+            [
+                'pemasukans' => $pemasukans,
+
+                'filters' => [
+                    'search' => $search,
+                ],
+            ]
+        );
     }
 
     public function create()
     {
-        return Inertia::render('pemasukan/create', [
-            'kolams' => Kolam::orderBy(
-                'nama_kolam'
-            )->get(),
-        ]);
+        return Inertia::render(
+            'pemasukan/create',
+            [
+                'kolams' => Kolam::orderBy(
+                    'nama_kolam'
+                )->get(),
+            ]
+        );
     }
 
     public function store(Request $request)
@@ -68,19 +75,9 @@ class PemasukanController extends Controller
                 'integer',
                 'min:1',
             ],
-
-            'harga_per_kg' => [
-                'required',
-                'numeric',
-                'min:0',
-            ],
         ]);
 
-        $validated['total_pemasukan'] =
-            $validated['berat_panen'] *
-            $validated['harga_per_kg'];
-
-        Pemasukan::create($validated);
+        Panen::create($validated);
 
         return redirect()
             ->route('pemasukans.index')
@@ -90,20 +87,23 @@ class PemasukanController extends Controller
             );
     }
 
-    public function edit(Pemasukan $pemasukan)
+    public function edit(Panen $pemasukan)
     {
-        return Inertia::render('pemasukan/edit', [
-            'pemasukan' => $pemasukan,
+        return Inertia::render(
+            'pemasukan/edit',
+            [
+                'pemasukan' => $pemasukan,
 
-            'kolams' => Kolam::orderBy(
-                'nama_kolam'
-            )->get(),
-        ]);
+                'kolams' => Kolam::orderBy(
+                    'nama_kolam'
+                )->get(),
+            ]
+        );
     }
 
     public function update(
         Request $request,
-        Pemasukan $pemasukan
+        Panen $pemasukan
     ) {
         $validated = $request->validate([
             'kolam_id' => [
@@ -127,17 +127,7 @@ class PemasukanController extends Controller
                 'integer',
                 'min:1',
             ],
-
-            'harga_per_kg' => [
-                'required',
-                'numeric',
-                'min:0',
-            ],
         ]);
-
-        $validated['total_pemasukan'] =
-            $validated['berat_panen'] *
-            $validated['harga_per_kg'];
 
         $pemasukan->update($validated);
 
@@ -149,7 +139,7 @@ class PemasukanController extends Controller
             );
     }
 
-    public function destroy(Pemasukan $pemasukan)
+    public function destroy(Panen $pemasukan)
     {
         $pemasukan->delete();
 
