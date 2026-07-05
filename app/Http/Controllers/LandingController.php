@@ -6,6 +6,7 @@ use App\Models\Kolam;
 use App\Models\Pemasukan;
 use App\Models\AsetBiologis;
 use App\Models\Panen;
+use App\Models\Penjualan;
 use Inertia\Inertia;
 
 class LandingController extends Controller
@@ -86,14 +87,24 @@ class LandingController extends Controller
 
     public function stokUdang()
     {
-        $stokUdang = AsetBiologis::with('kolam')
-            ->latest('tanggal_penilaian')
-            ->get();
+        $totalPanen =
+            Panen::sum('berat_panen');
+
+        $totalTerjual =
+            Penjualan::sum('berat_kg');
+
+        $stokTersedia =
+            max(
+                $totalPanen - $totalTerjual,
+                0
+            );
 
         return Inertia::render(
             'stok-udang-public',
             [
-                'stokUdang' => $stokUdang,
+                'totalPanen' => $totalPanen,
+                'totalTerjual' => $totalTerjual,
+                'stokTersedia' => $stokTersedia,
             ]
         );
     }

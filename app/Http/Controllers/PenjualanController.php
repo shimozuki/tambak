@@ -53,6 +53,12 @@ class PenjualanController extends Controller
                 'date',
             ],
 
+            'berat_kg' => [
+                'required',
+                'numeric',
+                'min:0',
+            ],
+
             'jumlah_penjualan' => [
                 'required',
                 'numeric',
@@ -94,6 +100,12 @@ class PenjualanController extends Controller
             'tanggal_penjualan' => [
                 'required',
                 'date',
+            ],
+
+            'berat_kg' => [
+                'required',
+                'numeric',
+                'min:0',
             ],
 
             'jumlah_penjualan' => [

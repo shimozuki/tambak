@@ -2,50 +2,19 @@ import { Head } from '@inertiajs/react';
 import Navbar from '@/components/landing/Navbar';
 import Footer from '@/components/landing/Footer';
 
-interface StokUdang {
-    id: number;
-    tanggal_penilaian: string;
-    size_udang: number;
-    total_berat: number;
-
-    kolam: {
-        nama_kolam: string;
-    };
-}
 
 interface Props {
-    stokUdang: StokUdang[];
+    totalPanen: number;
+    totalTerjual: number;
+    stokTersedia: number;
 }
 
 export default function StokUdangPublic({
-    stokUdang,
+    totalPanen,
+    totalTerjual,
+    stokTersedia,
 }: Props) {
-    const totalStok = stokUdang.reduce(
-        (total, item) =>
-            total +
-            Number(item.total_berat),
-        0
-    );
 
-    const rataSize =
-        stokUdang.length > 0
-            ? Math.round(
-                  stokUdang.reduce(
-                      (total, item) =>
-                          total +
-                          Number(item.size_udang),
-                      0
-                  ) / stokUdang.length
-              )
-            : 0;
-
-    const totalKolam =
-        new Set(
-            stokUdang.map(
-                (item) =>
-                    item.kolam?.nama_kolam
-            )
-        ).size;
 
     const formatTanggal = (
         tanggal: string
@@ -164,155 +133,66 @@ export default function StokUdangPublic({
                     {/* SUMMARY */}
                     <div className="grid gap-6 md:grid-cols-3">
 
-                        <div className="rounded-3xl bg-white p-6 shadow-sm">
-                            <div className="text-sm text-slate-500">
-                                Total Stok
-                            </div>
-
-                            <div className="mt-2 text-4xl font-bold text-teal-600">
-                                {totalStok.toLocaleString()}
-                            </div>
-
-                            <div className="mt-1 text-sm text-slate-500">
-                                Kg
-                            </div>
+                    <div className="rounded-3xl bg-white p-6 shadow-sm">
+                        <div className="text-sm text-slate-500">
+                            Total Panen
                         </div>
 
-                        <div className="rounded-3xl bg-white p-6 shadow-sm">
-                            <div className="text-sm text-slate-500">
-                                Kolam Aktif
-                            </div>
-
-                            <div className="mt-2 text-4xl font-bold text-cyan-600">
-                                {totalKolam}
-                            </div>
+                        <div className="mt-2 text-4xl font-bold text-teal-600">
+                            {Number(totalPanen).toLocaleString()}
                         </div>
 
-                        <div className="rounded-3xl bg-white p-6 shadow-sm">
-                            <div className="text-sm text-slate-500">
-                                Rata-rata Size
-                            </div>
-
-                            <div className="mt-2 text-4xl font-bold text-amber-600">
-                                {rataSize}
-                            </div>
-
-                            <div className="mt-1 text-sm text-slate-500">
-                                Ekor/Kg
-                            </div>
+                        <div className="mt-1 text-sm text-slate-500">
+                            Kg
                         </div>
-
                     </div>
+
+                    <div className="rounded-3xl bg-white p-6 shadow-sm">
+                        <div className="text-sm text-slate-500">
+                            Total Terjual
+                        </div>
+
+                        <div className="mt-2 text-4xl font-bold text-red-600">
+                            {Number(totalTerjual).toLocaleString()}
+                        </div>
+
+                        <div className="mt-1 text-sm text-slate-500">
+                            Kg
+                        </div>
+                    </div>
+
+                    <div className="rounded-3xl bg-white p-6 shadow-sm">
+                        <div className="text-sm text-slate-500">
+                            Stok Tersedia
+                        </div>
+
+                        <div className="mt-2 text-4xl font-bold text-green-600">
+                            {Number(stokTersedia).toLocaleString()}
+                        </div>
+
+                        <div className="mt-1 text-sm text-slate-500">
+                            Kg
+                        </div>
+                    </div>
+
+                </div>
 
                     {/* CARD */}
-                    <div
-                        className="
-                            mt-10
-                            grid
-                            gap-6
-                            md:grid-cols-2
-                            xl:grid-cols-3
-                        "
-                    >
-                        {stokUdang.map(
-                            (item) => {
-                                const status =
-                                    getStatus(
-                                        Number(
-                                            item.size_udang
-                                        )
-                                    );
+                   <div className="mt-10 rounded-3xl bg-white p-10 text-center shadow-sm">
 
-                                return (
-                                    <div
-                                        key={
-                                            item.id
-                                        }
-                                        className="
-                                            rounded-3xl
-                                            bg-white
-                                            p-6
-                                            shadow-sm
-                                            transition
-                                            hover:-translate-y-1
-                                            hover:shadow-xl
-                                        "
-                                    >
-                                        <div
-                                            className="
-                                                flex
-                                                items-center
-                                                justify-between
-                                            "
-                                        >
-                                            <h3
-                                                className="
-                                                    text-xl
-                                                    font-bold
-                                                "
-                                            >
-                                                {
-                                                    item
-                                                        .kolam
-                                                        ?.nama_kolam
-                                                }
-                                            </h3>
-
-                                            <span
-                                                className={`rounded-full px-3 py-1 text-xs font-semibold ${status.color}`}
-                                            >
-                                                {
-                                                    status.label
-                                                }
-                                            </span>
-                                        </div>
-
-                                        <div className="mt-5 space-y-4">
-
-                                            <div className="flex justify-between">
-                                                <span className="text-slate-500">
-                                                    Stok Tersedia
-                                                </span>
-
-                                                <span className="font-semibold">
-                                                    {
-                                                        item.total_berat
-                                                    }{' '}
-                                                    Kg
-                                                </span>
-                                            </div>
-
-                                            <div className="flex justify-between">
-                                                <span className="text-slate-500">
-                                                    Size Udang
-                                                </span>
-
-                                                <span>
-                                                    {
-                                                        item.size_udang
-                                                    }{' '}
-                                                    Ekor/Kg
-                                                </span>
-                                            </div>
-
-                                            <div className="flex justify-between">
-                                                <span className="text-slate-500">
-                                                    Update
-                                                </span>
-
-                                                <span>
-                                                    {formatTanggal(
-                                                        item.tanggal_penilaian
-                                                    )}
-                                                </span>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                );
-                            }
-                        )}
+                    <div className="text-sm uppercase tracking-widest text-slate-500">
+                        Ready Stock
                     </div>
+
+                    <div className="mt-4 text-7xl font-bold text-green-600">
+                        {Number(stokTersedia).toLocaleString()}
+                    </div>
+
+                    <div className="mt-2 text-xl text-slate-500">
+                        Kilogram
+                    </div>
+
+                </div>
 
                     {/* CTA */}
                     <div

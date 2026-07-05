@@ -6,6 +6,7 @@ export default function CreatePenjualan() {
     const { data, setData, post, processing, errors } =
         useForm({
             tanggal_penjualan: '',
+             berat_kg: '',
             jumlah_penjualan: '',
             keterangan: '',
         });
@@ -91,6 +92,39 @@ export default function CreatePenjualan() {
                             {errors.tanggal_penjualan && (
                                 <div className="mt-1 text-sm text-red-500">
                                     {errors.tanggal_penjualan}
+                                </div>
+                            )}
+                        </div>
+                        {/* Berat Terjual */}
+                        <div>
+                            <label className="mb-2 block text-sm font-medium text-slate-700">
+                                Berat Terjual (Kg)
+                            </label>
+
+                            <input
+                                type="number"
+                                step="0.01"
+                                value={data.berat_kg}
+                                onChange={(e) =>
+                                    setData(
+                                        'berat_kg',
+                                        e.target.value
+                                    )
+                                }
+                                placeholder="Masukkan berat yang terjual"
+                                className="
+                                    w-full
+                                    rounded-xl
+                                    border border-slate-200
+                                    px-4 py-3
+                                    focus:border-teal-500
+                                    focus:outline-none
+                                "
+                            />
+
+                            {errors.berat_kg && (
+                                <div className="mt-1 text-sm text-red-500">
+                                    {errors.berat_kg}
                                 </div>
                             )}
                         </div>

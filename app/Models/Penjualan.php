@@ -11,6 +11,7 @@ class Penjualan extends Model
 
     protected $fillable = [
         'tanggal_penjualan',
+        'berat_kg',
         'jumlah_penjualan',
         'keterangan',
     ];

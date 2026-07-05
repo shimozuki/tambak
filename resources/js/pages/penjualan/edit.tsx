@@ -5,6 +5,7 @@ import { ArrowLeft, Save } from 'lucide-react';
 interface Penjualan {
     id: number;
     tanggal_penjualan: string;
+    berat_kg: number;
     jumlah_penjualan: number;
     keterangan: string | null;
 }
@@ -25,6 +26,10 @@ export default function EditPenjualan({
     } = useForm({
         tanggal_penjualan:
             penjualan.tanggal_penjualan,
+
+        berat_kg: String(
+            penjualan.berat_kg
+        ),
         jumlah_penjualan: String(
             penjualan.jumlah_penjualan
         ),
@@ -130,6 +135,37 @@ export default function EditPenjualan({
                             )}
                         </div>
 
+                        {/* Berat Terjual */}
+                        <div>
+                            <label className="mb-2 block text-sm font-medium text-slate-700">
+                                Berat Terjual (Kg)
+                            </label>
+
+                            <input
+                                type="number"
+                                step="0.01"
+                                value={data.berat_kg}
+                                onChange={(e) =>
+                                    setData(
+                                        'berat_kg',
+                                        e.target.value
+                                    )
+                                }
+                                className="
+                                    w-full
+                                    rounded-xl
+                                    border border-slate-200
+                                    px-4 py-3
+                                "
+                            />
+
+                            {errors.berat_kg && (
+                                <div className="mt-1 text-sm text-red-500">
+                                    {errors.berat_kg}
+                                </div>
+                            )}
+                        </div>
+
                         {/* Jumlah */}
                         <div>
                             <label className="mb-2 block text-sm font-medium text-slate-700">
@@ -166,21 +202,33 @@ export default function EditPenjualan({
                         </div>
 
                         {/* Preview */}
-                        <div className="rounded-2xl bg-green-50 p-5">
+                         <div className="space-y-3">
 
+                        <div>
+                            <div className="text-sm text-green-700">
+                                Berat Terjual
+                            </div>
+
+                            <div className="text-xl font-semibold text-slate-700">
+                                {data.berat_kg || 0} Kg
+                            </div>
+                        </div>
+
+                        <div>
                             <div className="text-sm text-green-700">
                                 Nilai Penjualan
                             </div>
 
-                            <div className="mt-2 text-3xl font-bold text-green-600">
+                            <div className="text-3xl font-bold text-green-600">
                                 {rupiah(
                                     Number(
                                         data.jumlah_penjualan
                                     )
                                 )}
                             </div>
-
                         </div>
+
+                    </div>
 
                         {/* Keterangan */}
                         <div>

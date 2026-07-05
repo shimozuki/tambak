@@ -14,6 +14,7 @@ import toast from 'react-hot-toast';
 interface Penjualan {
     id: number;
     tanggal_penjualan: string;
+    berat_kg: number;
     jumlah_penjualan: number;
     keterangan: string | null;
 }
@@ -151,6 +152,7 @@ export default function PenjualanIndex({
                             size={40}
                             className="text-green-600"
                         />
+                        
 
                         <div>
                             <div className="text-sm text-slate-500">
@@ -228,6 +230,10 @@ export default function PenjualanIndex({
                                 </th>
 
                                 <th className="px-6 py-4 text-right">
+                                    Berat
+                                </th>
+
+                                <th className="px-6 py-4 text-right">
                                     Jumlah
                                 </th>
 
@@ -264,6 +270,10 @@ export default function PenjualanIndex({
                                         <td className="px-6 py-4">
                                             {item.keterangan ??
                                                 '-'}
+                                        </td>
+
+                                        <td className="px-6 py-4 text-right font-semibold text-green-600">
+                                            {item.berat_kg} kg
                                         </td>
 
                                         <td className="px-6 py-4 text-right font-semibold text-green-600">
