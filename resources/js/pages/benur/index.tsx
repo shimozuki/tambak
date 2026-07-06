@@ -79,6 +79,17 @@ export default function BenurIndex({
         });
     };
 
+    const { auth } = usePage().props as any;
+
+    const roles: string[] =
+        auth.user.roles ?? [];
+
+    const isAdminKeuangan =
+        roles.includes('admin-keuangan');
+
+    const isSuperAdmin =
+        roles.includes('super-admin');
+
     return (
         <AppLayout>
             <Head title="Data Benur" />
@@ -96,7 +107,7 @@ export default function BenurIndex({
                             Kelola data tebar benur.
                         </p>
                     </div>
-
+{(isAdminKeuangan || isSuperAdmin) && (
                     <Link
                         href="/benurs/create"
                         className="
@@ -112,6 +123,7 @@ export default function BenurIndex({
                         <Plus size={18} />
                         Tambah Benur
                     </Link>
+    )}
                 </div>
 
                 {/* Search */}
@@ -178,10 +190,11 @@ export default function BenurIndex({
                                 <th className="px-4 py-3 text-left">
                                     Total Biaya
                                 </th>
-
+{(isAdminKeuangan || isSuperAdmin) && (
                                 <th className="px-4 py-3 text-center">
                                     Aksi
                                 </th>
+)}
                             </tr>
                         </thead>
 
@@ -225,7 +238,7 @@ export default function BenurIndex({
                                                 benur.total_biaya ?? 0
                                             ).toLocaleString('id-ID')}
                                         </td>
-
+{(isAdminKeuangan || isSuperAdmin) && (
                                         <td className="px-4 py-4">
                                             <div className="flex justify-center gap-2">
 
@@ -260,6 +273,7 @@ export default function BenurIndex({
                                                 </button>
                                             </div>
                                         </td>
+)}
                                     </tr>
                                 ))
                             ) : (

@@ -89,6 +89,17 @@ export default function PengeluaranIndex({
         }).format(value);
     };
 
+    const { auth } = usePage().props as any;
+
+    const roles: string[] =
+        auth.user.roles ?? [];
+
+    const isAdminKeuangan =
+        roles.includes('admin-keuangan');
+
+    const isSuperAdmin =
+        roles.includes('super-admin');
+
     return (
         <AppLayout>
             <Head title="Pengeluaran" />
@@ -105,7 +116,7 @@ export default function PengeluaranIndex({
                             Kelola transaksi pengeluaran tambak.
                         </p>
                     </div>
-
+{(isAdminKeuangan || isSuperAdmin) && (
                     <Link
                         href="/pengeluarans/create"
                         className="
@@ -124,6 +135,7 @@ export default function PengeluaranIndex({
                         <Plus size={18} />
                         Tambah Pengeluaran
                     </Link>
+                )}
                 </div>
 
                 {/* Search */}
@@ -189,10 +201,11 @@ export default function PengeluaranIndex({
                                 <th className="px-4 py-3 text-left text-sm font-semibold text-slate-600">
                                     Keterangan
                                 </th>
-
+{(isAdminKeuangan || isSuperAdmin) && (
                                 <th className="px-4 py-3 text-center text-sm font-semibold text-slate-600">
                                     Aksi
                                 </th>
+)}
                             </tr>
                         </thead>
 
@@ -235,7 +248,7 @@ export default function PengeluaranIndex({
                                                 {pengeluaran.keterangan ??
                                                     '-'}
                                             </td>
-
+{(isAdminKeuangan || isSuperAdmin) && (
                                             <td className="px-4 py-4">
                                                 <div className="flex justify-center gap-2">
                                                     <Link
@@ -269,6 +282,7 @@ export default function PengeluaranIndex({
                                                     </button>
                                                 </div>
                                             </td>
+)}
                                         </tr>
                                     )
                                 )

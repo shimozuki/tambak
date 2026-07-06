@@ -71,6 +71,17 @@ export default function Index({
         });
     };
 
+    const { auth } = usePage().props as any;
+
+    const roles: string[] =
+        auth.user.roles ?? [];
+
+    const isAdminKeuangan =
+        roles.includes('admin-keuangan');
+
+    const isSuperAdmin =
+        roles.includes('super-admin');
+
     return (
         <AppLayout>
             <Head title="Kategori Pengeluaran" />
@@ -87,7 +98,7 @@ export default function Index({
                             Kelola master kategori pengeluaran.
                         </p>
                     </div>
-
+{(isAdminKeuangan || isSuperAdmin) && (
                     <Link
                         href="/kategori-pengeluarans/create"
                         className="
@@ -103,6 +114,7 @@ export default function Index({
                         <Plus size={18} />
                         Tambah Kategori
                     </Link>
+)}
                 </div>
 
                 {/* Search */}
@@ -157,9 +169,11 @@ export default function Index({
                                     Nama Kategori
                                 </th>
 
+                            {(isAdminKeuangan || isSuperAdmin) && (
                                 <th className="px-4 py-3 text-center text-sm font-semibold text-slate-600">
                                     Aksi
                                 </th>
+                            )}
                             </tr>
                         </thead>
 
@@ -180,7 +194,7 @@ export default function Index({
                                                     kategori.nama_kategori
                                                 }
                                             </td>
-
+                                                {(isAdminKeuangan || isSuperAdmin) && (
                                             <td className="px-4 py-4">
                                                 <div className="flex justify-center gap-2">
                                                     <Link
@@ -218,6 +232,7 @@ export default function Index({
                                                     </button>
                                                 </div>
                                             </td>
+                                                )}
                                         </tr>
                                     )
                                 )

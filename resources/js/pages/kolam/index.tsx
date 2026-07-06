@@ -80,6 +80,17 @@ export default function KolamIndex({
     });
 };
 
+const { auth } = usePage().props as any;
+
+    const roles: string[] =
+        auth.user.roles ?? [];
+
+    const isAdminKeuangan =
+        roles.includes('admin-keuangan');
+
+    const isSuperAdmin =
+        roles.includes('super-admin');
+
     return (
         <AppLayout>
             <Head title="Data Kolam" />
@@ -96,7 +107,7 @@ export default function KolamIndex({
                             Kelola data kolam tambak.
                         </p>
                     </div>
-
+{(isAdminKeuangan || isSuperAdmin) && (
                     <Link
                         href="/kolams/create"
                         className="
@@ -112,6 +123,7 @@ export default function KolamIndex({
                         <Plus size={18} />
                         Tambah Kolam
                     </Link>
+)}
                 </div>
 
                 {/* Search */}
@@ -173,10 +185,11 @@ export default function KolamIndex({
                                 <th className="px-4 py-3 text-left text-sm font-semibold text-slate-600">
                                     Status
                                 </th>
-
+{(isAdminKeuangan || isSuperAdmin) && (
                                 <th className="px-4 py-3 text-center text-sm font-semibold text-slate-600">
                                     Aksi
                                 </th>
+)}
                             </tr>
                         </thead>
 
@@ -219,6 +232,7 @@ export default function KolamIndex({
                                             </span>
                                         </td>
 
+{(isAdminKeuangan || isSuperAdmin) && (
                                         <td className="px-4 py-4">
                                             <div className="flex justify-center gap-2">
                                                 <Link
@@ -252,6 +266,7 @@ export default function KolamIndex({
                                                 </button>
                                             </div>
                                         </td>
+)}
                                     </tr>
                                 ))
                             ) : (

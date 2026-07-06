@@ -105,6 +105,17 @@ export default function PenjualanIndex({
             0
         );
 
+        const { auth } = usePage().props as any;
+
+    const roles: string[] =
+        auth.user.roles ?? [];
+
+    const isAdminKeuangan =
+        roles.includes('admin-keuangan');
+
+    const isSuperAdmin =
+        roles.includes('super-admin');
+
     return (
         <AppLayout>
             <Head title="Penjualan" />
@@ -125,7 +136,7 @@ export default function PenjualanIndex({
                             penjualan udang.
                         </p>
                     </div>
-
+{(isAdminKeuangan || isSuperAdmin) && (
                     <Link
                         href="/penjualans/create"
                         className="
@@ -140,6 +151,7 @@ export default function PenjualanIndex({
 
                         Tambah
                     </Link>
+)}
 
                 </div>
 
@@ -236,10 +248,11 @@ export default function PenjualanIndex({
                                 <th className="px-6 py-4 text-right">
                                     Jumlah
                                 </th>
-
+{(isAdminKeuangan || isSuperAdmin) && (
                                 <th className="px-6 py-4 text-center">
                                     Aksi
                                 </th>
+)}
 
                             </tr>
 
@@ -282,6 +295,7 @@ export default function PenjualanIndex({
                                             )}
                                         </td>
 
+{(isAdminKeuangan || isSuperAdmin) && (
                                         <td className="px-6 py-4">
 
                                             <div className="flex justify-center gap-2">
@@ -317,6 +331,7 @@ export default function PenjualanIndex({
                                             </div>
 
                                         </td>
+)}
                                     </tr>
                                 )
                             )}

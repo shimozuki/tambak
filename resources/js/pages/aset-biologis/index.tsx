@@ -81,6 +81,17 @@ export default function AsetBiologisIndex({
         });
     };
 
+    const { auth } = usePage().props as any;
+
+    const roles: string[] =
+        auth.user.roles ?? [];
+
+    const isAdminKeuangan =
+        roles.includes('admin-keuangan');
+
+    const isSuperAdmin =
+        roles.includes('super-admin');
+
     const rupiah = (value: number) => {
         return new Intl.NumberFormat('id-ID', {
             style: 'currency',
@@ -105,7 +116,7 @@ export default function AsetBiologisIndex({
                             Penilaian aset biologis berdasarkan PSAK 69.
                         </p>
                     </div>
-
+{(isAdminKeuangan || isSuperAdmin) && (
                     <Link
                         href="/aset-biologis/create"
                         className="
@@ -121,6 +132,7 @@ export default function AsetBiologisIndex({
                         <Plus size={18} />
                         Tambah Penilaian
                     </Link>
+                    )}
                 </div>
 
                 {/* Search */}
@@ -194,10 +206,11 @@ export default function AsetBiologisIndex({
                                 <th className="px-4 py-3 text-right text-sm font-semibold text-slate-600">
                                     Nilai Wajar
                                 </th>
-
+{(isAdminKeuangan || isSuperAdmin) && (
                                 <th className="px-4 py-3 text-center text-sm font-semibold text-slate-600">
                                     Aksi
                                 </th>
+                                )}
                             </tr>
                         </thead>
 
@@ -243,7 +256,7 @@ export default function AsetBiologisIndex({
                                                 aset.nilai_wajar
                                             )}
                                         </td>
-
+                                            {(isAdminKeuangan || isSuperAdmin) && (
                                         <td className="px-4 py-4">
                                             <div className="flex justify-center gap-2">
                                                 <Link
@@ -277,6 +290,7 @@ export default function AsetBiologisIndex({
                                                 </button>
                                             </div>
                                         </td>
+                                        )}
                                     </tr>
                                 ))
                             ) : (

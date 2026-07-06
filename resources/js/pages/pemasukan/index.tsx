@@ -85,6 +85,17 @@ export default function PemasukanIndex({
         0
     );
 
+    const { auth } = usePage().props as any;
+
+    const roles: string[] =
+        auth.user.roles ?? [];
+
+    const isAdminKeuangan =
+        roles.includes('admin-keuangan');
+
+    const isSuperAdmin =
+        roles.includes('super-admin');
+
     return (
         <AppLayout>
             <Head title="Data Panen" />
@@ -112,7 +123,7 @@ export default function PemasukanIndex({
                             Kelola data hasil panen tambak.
                         </p>
                     </div>
-
+{(isAdminKeuangan || isSuperAdmin) && (
                     <Link
                         href="/pemasukans/create"
                         className="
@@ -128,6 +139,7 @@ export default function PemasukanIndex({
                         <Plus size={18} />
                         Tambah Panen
                     </Link>
+)}
                 </div>
 
                 {/* Search */}
@@ -189,10 +201,11 @@ export default function PemasukanIndex({
                                 <th className="px-4 py-3 text-center text-sm font-semibold text-slate-600">
                                     Size
                                 </th>
-
+{(isAdminKeuangan || isSuperAdmin) && (
                                 <th className="px-4 py-3 text-center text-sm font-semibold text-slate-600">
                                     Aksi
                                 </th>
+)}
                             </tr>
                         </thead>
 
@@ -231,7 +244,7 @@ export default function PemasukanIndex({
                                                     pemasukan.size
                                                 }
                                             </td>
-
+{(isAdminKeuangan || isSuperAdmin) && (
                                             <td className="px-4 py-4">
                                                 <div className="flex justify-center gap-2">
                                                     <Link
@@ -265,6 +278,7 @@ export default function PemasukanIndex({
                                                     </button>
                                                 </div>
                                             </td>
+)}
                                         </tr>
                                     )
                                 )

@@ -105,6 +105,17 @@ export default function UserIndex({
         );
     };
 
+    const { auth } = usePage().props as any;
+
+    const roles: string[] =
+        auth.user.roles ?? [];
+
+    const isAdminKeuangan =
+        roles.includes('admin-keuangan');
+
+    const isSuperAdmin =
+        roles.includes('super-admin');
+
     return (
         <AppLayout>
             <Head title="Kelola User" />
@@ -124,7 +135,7 @@ export default function UserIndex({
                             aplikasi.
                         </p>
                     </div>
-
+{(isAdminKeuangan || isSuperAdmin) && (
                     <Link
                         href="/users/create"
                         className="
@@ -138,6 +149,7 @@ export default function UserIndex({
                         <Plus size={18} />
                         Tambah User
                     </Link>
+)}
 
                 </div>
 
@@ -229,10 +241,11 @@ export default function UserIndex({
                                 <th className="px-6 py-4 text-left">
                                     Role
                                 </th>
-
+{(isAdminKeuangan || isSuperAdmin) && (
                                 <th className="px-6 py-4 text-center">
                                     Aksi
                                 </th>
+)}
 
                             </tr>
 
@@ -283,7 +296,7 @@ export default function UserIndex({
                                             </span>
 
                                         </td>
-
+{(isAdminKeuangan || isSuperAdmin) && (
                                         <td className="px-6 py-4">
 
                                             <div className="flex justify-center gap-2">
@@ -319,6 +332,7 @@ export default function UserIndex({
                                             </div>
 
                                         </td>
+)}
 
                                     </tr>
                                 )
