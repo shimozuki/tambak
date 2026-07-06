@@ -79,6 +79,14 @@ export function SidebarContent({
 
     const isActive = (path: string) => url === path || url.startsWith(path);
 
+    const roles = auth.user.roles ?? [];
+
+    const isSuperAdmin =
+        roles.includes('super-admin');
+
+    const isAdminKeuangan =
+        roles.includes('admin-keuangan');
+
     return (
         <div className="relative flex h-full flex-col">
             {/* Toggle Button - Desktop Only */}
@@ -152,6 +160,7 @@ export function SidebarContent({
             active={isActive('/kategori-pengeluarans')}
         />
 
+         {isSuperAdmin && (
         <NavItem
             icon={<Users size={20} />}
             label="Kelola User"
@@ -159,6 +168,7 @@ export function SidebarContent({
             isCollapsed={isCollapsed}
             active={isActive('/users')}
         />
+    )}
                 </nav>
 
 
