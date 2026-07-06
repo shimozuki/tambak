@@ -12,6 +12,7 @@ use App\Http\Controllers\PemasukanController;
 use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\StokUdangController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -36,59 +37,178 @@ Route::get(
     [LandingController::class, 'stokUdang']
 );
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware([
+    'auth',
+    'verified',
+])->group(function () {
 
     Route::get(
         '/dashboard',
         [DashboardController::class, 'index']
     )->name('dashboard');
 
-
-    Route::resource('kolams', KolamController::class);
-    Route::resource('benurs', BenurController::class);
-    Route::resource(
-        'kategori-pengeluarans',
-        KategoriPengeluaranController::class
-    );
-    Route::resource(
-        'pengeluarans',
-        PengeluaranController::class
-    );
+    /*
+    |--------------------------------------------------------------------------
+    | SUPER ADMIN
+    |--------------------------------------------------------------------------
+    */
 
     Route::resource(
-        'pemasukans',
-        PemasukanController::class
-    );
+        'users',
+        UserController::class
+    )->middleware('role:super-admin');
 
-    Route::resource(
-        'aset-biologis',
-        AsetBiologisController::class
-    );
+    /*
+    |--------------------------------------------------------------------------
+    | OPERASIONAL TAMBAK
+    |--------------------------------------------------------------------------
+    */
 
-    Route::resource(
-        'penjualans',
-        PenjualanController::class
-    );
+    Route::middleware([
+        'role:super-admin|pengelola'
+    ])->group(function () {
 
-    Route::get(
-        '/laporan',
-        [LaporanController::class, 'index']
-    )->name('laporan.index');
+        Route::resource(
+            'kolams',
+            KolamController::class
+        );
 
-    Route::get(
-        '/laporan/export-pdf',
-        [LaporanController::class, 'exportPdf']
-    )->name('laporan.export-pdf');
+        Route::resource(
+            'benurs',
+            BenurController::class
+        );
 
-    Route::get(
-        '/laporan/perubahan-nilai-wajar',
-        [FairValueController::class, 'index']
-    )->name('laporan.perubahan-nilai-wajar');
+        Route::resource(
+            'aset-biologis',
+            AsetBiologisController::class
+        );
+
+        Route::resource(
+            'pemasukans',
+            PemasukanController::class
+        );
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | PENJUALAN
+    |--------------------------------------------------------------------------
+    */
+
+    Route::middleware([
+        'role:super-admin|pengelola|admin-keuangan'
+    ])->group(function () {
+
+        Route::resource(
+            'penjualans',
+            PenjualanController::class
+        );
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | KEUANGAN
+    |--------------------------------------------------------------------------
+    */
+
+    Route::middleware([
+        'role:super-admin|admin-keuangan'
+    ])->group(function () {
+
+        Route::resource(
+            'pengeluarans',
+            PengeluaranController::class
+        );
+
+        Route::resource(
+            'kategori-pengeluarans',
+            KategoriPengeluaranController::class
+        );
+
+        Route::get(
+            '/laporan',
+            [LaporanController::class, 'index']
+        )->name('laporan.index');
+
+        Route::get(
+            '/laporan/export-pdf',
+            [LaporanController::class, 'exportPdf']
+        )->name('laporan.export-pdf');
+
+        Route::get(
+            '/laporan/perubahan-nilai-wajar',
+            [FairValueController::class, 'index']
+        )->name('laporan.perubahan-nilai-wajar');
+    });
 
     Route::get(
         '/stok-udang',
         [StokUdangController::class, 'index']
     );
 });
+
+// Route::middleware(['auth', 'verified'])->group(function () {
+
+//     Route::get(
+//         '/dashboard',
+//         [DashboardController::class, 'index']
+//     )->name('dashboard');
+
+
+//     Route::resource('kolams', KolamController::class);
+//     Route::resource('benurs', BenurController::class);
+//     Route::resource(
+//         'kategori-pengeluarans',
+//         KategoriPengeluaranController::class
+//     );
+//     Route::resource(
+//         'pengeluarans',
+//         PengeluaranController::class
+//     );
+
+//     Route::resource(
+//         'pemasukans',
+//         PemasukanController::class
+//     );
+
+//     Route::resource(
+//         'aset-biologis',
+//         AsetBiologisController::class
+//     );
+
+//     Route::resource(
+//         'penjualans',
+//         PenjualanController::class
+//     );
+
+//     Route::get(
+//         '/laporan',
+//         [LaporanController::class, 'index']
+//     )->name('laporan.index');
+
+//     Route::get(
+//         '/laporan/export-pdf',
+//         [LaporanController::class, 'exportPdf']
+//     )->name('laporan.export-pdf');
+
+//     Route::get(
+//         '/laporan/perubahan-nilai-wajar',
+//         [FairValueController::class, 'index']
+//     )->name('laporan.perubahan-nilai-wajar');
+
+//     Route::get(
+//         '/stok-udang',
+//         [StokUdangController::class, 'index']
+//     );
+// });
+
+// Route::middleware([
+//     'role:super-admin'
+// ])->group(function () {
+//     Route::resource(
+//         'users',
+//         UserController::class
+//     );
+// });
 
 require __DIR__ . '/settings.php';

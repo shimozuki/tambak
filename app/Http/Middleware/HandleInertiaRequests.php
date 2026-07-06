@@ -49,7 +49,16 @@ class HandleInertiaRequests extends Middleware
             ],
 
             'auth' => [
-                'user' => $request->user(),
+                'user' => fn() => $request->user()
+                    ? [
+                        'id' => $request->user()->id,
+                        'name' => $request->user()->name,
+                        'email' => $request->user()->email,
+                        'roles' => $request->user()
+                            ->roles
+                            ->pluck('name'),
+                    ]
+                    : null,
             ],
 
             'sidebarOpen' => ! $request->hasCookie('sidebar_state')

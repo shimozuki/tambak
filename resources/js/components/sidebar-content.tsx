@@ -78,6 +78,19 @@ export function SidebarContent({
     const [isManageUserOpen, setIsManageUserOpen] = useState(false);
 
     const isActive = (path: string) => url === path || url.startsWith(path);
+    const roles = auth.user.roles ?? [];
+
+    const isSuperAdmin =
+        roles.includes('super-admin');
+
+    const isAdminKeuangan =
+        roles.includes('admin-keuangan');
+
+    const isPengelola =
+        roles.includes('pengelola');
+
+    
+    console.log("https://github.com/shimozuki/tambak.git");
 
     return (
         <div className="relative flex h-full flex-col">
@@ -129,29 +142,46 @@ export function SidebarContent({
 
 
                 <nav className="space-y-1">
-                    <NavItem
-                        icon={<Home size={20} />}
-                        label="Dashboard"
-                        href={dashboard().url}
-                        isCollapsed={isCollapsed}
-                        active={isActive(dashboard().url)}
-                    />
 
-                    <NavItem
-                        icon={<Fish size={20} />}
-                        label="Kolam Tambak"
-                        href="/kolams"
-                        isCollapsed={isCollapsed}
-                        active={isActive('/kolams')}
-                    />
-                     <NavItem
+    <NavItem
+        icon={<Home size={20} />}
+        label="Dashboard"
+        href={dashboard().url}
+        isCollapsed={isCollapsed}
+        active={isActive(dashboard().url)}
+    />
+
+    {(isSuperAdmin || isPengelola) && (
+        <NavItem
+            icon={<Fish size={20} />}
+            label="Kolam Tambak"
+            href="/kolams"
+            isCollapsed={isCollapsed}
+            active={isActive('/kolams')}
+        />
+    )}
+
+    {(isSuperAdmin || isAdminKeuangan) && (
+        <NavItem
             icon={<Tags size={20} />}
             label="Kategori Pengeluaran"
             href="/kategori-pengeluarans"
             isCollapsed={isCollapsed}
             active={isActive('/kategori-pengeluarans')}
         />
-                </nav>
+    )}
+
+    {isSuperAdmin && (
+        <NavItem
+            icon={<Users size={20} />}
+            label="Kelola User"
+            href="/users"
+            isCollapsed={isCollapsed}
+            active={isActive('/users')}
+        />
+    )}
+
+</nav>
 
 
                 </div>
@@ -171,49 +201,73 @@ export function SidebarContent({
 
 
 <nav className="space-y-1">
-    <NavItem
-        icon={<Package size={20} />}
-        label="Tebar Benur"
-        href="/benurs"
-        isCollapsed={isCollapsed}
-        active={isActive('/benurs')}
-    />
 
-    <NavItem
-    icon={<Fish size={20} />}
-    label="Stok Udang"
-    href="/stok-udang"
-    isCollapsed={isCollapsed}
-    active={isActive('/stok-udang')}
-/>
+    {(isSuperAdmin || isPengelola) && (
+        <NavItem
+            icon={<Package size={20} />}
+            label="Tebar Benur"
+            href="/benurs"
+            isCollapsed={isCollapsed}
+            active={isActive('/benurs')}
+        />
+    )}
 
-    <NavItem
-        icon={<Wallet size={20} />}
-        label="Pengeluaran"
-        href="/pengeluarans"
-        isCollapsed={isCollapsed}
-        active={isActive('/pengeluarans')}
-    />
+    {(isSuperAdmin || isPengelola) && (
+        <NavItem
+            icon={<Fish size={20} />}
+            label="Stok Udang"
+            href="/stok-udang"
+            isCollapsed={isCollapsed}
+            active={isActive('/stok-udang')}
+        />
+    )}
 
-    <NavItem
-        icon={<DollarSign size={20} />}
-        label="Penjualan"
-        href="/penjualans"
-        isCollapsed={isCollapsed}
-        active={isActive('/penjualans')}
-    />
+    {(isSuperAdmin || isAdminKeuangan) && (
+        <NavItem
+            icon={<Wallet size={20} />}
+            label="Pengeluaran"
+            href="/pengeluarans"
+            isCollapsed={isCollapsed}
+            active={isActive('/pengeluarans')}
+        />
+    )}
 
-    <NavItem
-        icon={<Landmark size={20} />}
-        label="Panen"
-        href="/pemasukans"
-        isCollapsed={isCollapsed}
-        active={isActive('/pemasukans')}
-    />
-    
+    {(isSuperAdmin ||
+        isAdminKeuangan ||
+        isPengelola) && (
+        <NavItem
+            icon={<DollarSign size={20} />}
+            label="Penjualan"
+            href="/penjualans"
+            isCollapsed={isCollapsed}
+            active={isActive('/penjualans')}
+        />
+    )}
+
+    {(isSuperAdmin || isPengelola) && (
+        <NavItem
+            icon={<Landmark size={20} />}
+            label="Panen"
+            href="/pemasukans"
+            isCollapsed={isCollapsed}
+            active={isActive('/pemasukans')}
+        />
+    )}
+
+    {(isSuperAdmin || isPengelola) && (
+        <NavItem
+            icon={<Fish size={20} />}
+            label="Aset Biologis"
+            href="/aset-biologis"
+            isCollapsed={isCollapsed}
+            active={isActive('/aset-biologis')}
+        />
+    )}
+
+
 </nav>
 
-<nav className="space-y-1"> <NavItem icon={<Fish size={20} />} label="Aset Biologis" href="/aset-biologis" isCollapsed={isCollapsed} active={isActive('/aset-biologis')} /> </nav>
+
 
 
 </div>
@@ -230,6 +284,7 @@ export function SidebarContent({
 
 
 <nav className="space-y-1">
+    {(isSuperAdmin || isAdminKeuangan) && (
     <NavItem
     icon={<FileText size={20} />}
     label="Laporan Keuangan"
@@ -237,6 +292,9 @@ export function SidebarContent({
     isCollapsed={isCollapsed}
     active={url === '/laporan'}
 />
+)}
+
+{(isSuperAdmin || isAdminKeuangan) &&(
     <NavItem
     icon={<Landmark size={20} />}
     label="Perubahan Nilai Wajar"
@@ -244,6 +302,7 @@ export function SidebarContent({
     isCollapsed={isCollapsed}
     active={url.startsWith('/laporan/perubahan-nilai-wajar')}
 />
+)}
 </nav>
 
 
