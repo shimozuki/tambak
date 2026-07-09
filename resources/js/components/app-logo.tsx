@@ -18,7 +18,7 @@ export default function AppLogo({
             />
             {!iconOnly && (
                 <span className={`text-xl font-bold ${textClassName}`}>
-                    Kedjora
+                    Admin
                 </span>
             )}
         </div>

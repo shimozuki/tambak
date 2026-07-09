@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\KategoriPengeluaran;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Database\QueryException;
 
 class KategoriPengeluaranController extends Controller
 {
@@ -96,16 +97,24 @@ class KategoriPengeluaranController extends Controller
             );
     }
 
-    public function destroy(
-        KategoriPengeluaran $kategoriPengeluaran
-    ) {
-        $kategoriPengeluaran->delete();
+    public function destroy(KategoriPengeluaran $kategoriPengeluaran)
+    {
+        try {
 
-        return redirect()
-            ->route('kategori-pengeluarans.index')
-            ->with(
+            $kategoriPengeluaran->delete();
+
+            return back()->with(
                 'success',
                 'Kategori pengeluaran berhasil dihapus.'
             );
+        } catch (QueryException $e) {
+
+            if ($e->getCode() === '23503') {
+                return back()->with(
+                    'error',
+                    'Kategori pengeluaran tidak dapat dihapus karena masih digunakan pada data pengeluaran.'
+                );
+            }
+        }
     }
 }

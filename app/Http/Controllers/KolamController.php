@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Kolam;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Database\QueryException;
 
 class KolamController extends Controller
 {
@@ -84,11 +85,27 @@ class KolamController extends Controller
 
     public function destroy(Kolam $kolam)
     {
-        $kolam->delete();
+        try {
 
-        return back()->with(
-            'success',
-            'Data kolam berhasil dihapus.'
-        );
+            $kolam->delete();
+
+            return back()->with(
+                'success',
+                'Data kolam berhasil dihapus.'
+            );
+        } catch (QueryException $e) {
+
+            if ($e->getCode() == 23000) {
+                return back()->with(
+                    'error',
+                    'Kolam tidak dapat dihapus karena masih digunakan pada data panen.'
+                );
+            }
+
+            return back()->with(
+                'error',
+                'Terjadi kesalahan saat menghapus data.'
+            );
+        }
     }
 }
